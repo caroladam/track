@@ -17,7 +17,7 @@ Filtered catalogs can be downloaded here:
 - _[Symphalangus syndactylus](https://www.dropbox.com/scl/fi/jfw6bmjuhkw5kyzi4olp4/symsyn_trf.bed.no_overlaps?rlkey=vngw7jzmr7ejnuynd37mmeu7k&st=2e3gkrt2&dl=0)_
 
 ### User's manual
-For detailed instructions on how to use this pipeline, please refer to the [user's manual](https://github.com/caroladam/TR-evolution-analyses/blob/main/manual/user_manual.md)
+For detailed instructions on how to use this pipeline, please refer to the [user's manual](https://github.com/caroladam/track/blob/main/manual/user_manual.md)
 
 ## Questions?
 Send your questions or suggestions to carolinaladam@gmail.com
