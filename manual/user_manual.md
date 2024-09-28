@@ -12,7 +12,7 @@ This tutorial will guide you through using TRACK to identify and filter TRs in r
 
 Ensure these tools are installed and available in your PATH or provide absolute paths for each tool.
 
-### 1A. [split_chr_fa.sh](https://github.com/caroladam/TR-evolution-analyses/blob/main/tr_catalog/split_chr_fa.sh)
+### 1A. [split_chr_fa.sh](https://github.com/caroladam/track/blob/main/tr_catalog/split_chr_fa.sh)
 
 This script processes all .fa files in a directory, splitting them by chromosome and creating index files.
 
@@ -22,7 +22,7 @@ This script processes all .fa files in a directory, splitting them by chromosome
 ./split_chr_fa.sh <path_to_fasta_files>
 ```
 
-### 1B. [run_trf.sh](https://github.com/caroladam/TR-evolution-analyses/blob/main/tr_catalog/run_TRF.sh)
+### 1B. [run_trf.sh](https://github.com/caroladam/track/blob/main/tr_catalog/run_TRF.sh)
 
 This script runs TRF on the indexed FASTA files using specific parameters (if necessary, modify TRF parameters within the script).
 
@@ -42,7 +42,7 @@ This will process all .fa files in the specified directory with the following TR
 - Minimum Score: 24
 - Maximum Period: 2000
 
-### 1C. [filter_tr_catalog.sh](https://github.com/caroladam/TR-evolution-analyses/blob/main/tr_catalog/filter_tr_catalog.sh)
+### 1C. [filter_tr_catalog.sh](https://github.com/caroladam/track/blob/main/tr_catalog/filter_tr_catalog.sh)
 
 This script filters and processes the TRF output files, generating a TR catalog.
 
@@ -82,7 +82,7 @@ chr1	12553	12571	18	1	19.0	A	AAAAAAAAAAAAAACAAAA	homo
   
 Ensure this tool is installed and available in your PATH or provide absolute paths for each tool.
 
-### 2A. [run_liftover.sh](https://github.com/caroladam/TR-evolution-analyses/blob/main/shared_trs/run_liftover.sh)
+### 2A. [run_liftover.sh](https://github.com/caroladam/track/blob/main/shared_trs/run_liftover.sh)
 
 This script runs a cross-species Liftover analysis. It takes TR coordinates from a `target` genome and identifies the corresponding coordinates in a `query` genome.
 
@@ -129,7 +129,7 @@ You can download available chain files directly from the [USCS Genome Browser](h
 - [bedtools](https://bedtools.readthedocs.io/en/latest/index.html)
 - [EMBOSS Needle](https://embossgui.sourceforge.net/demo/manual/needle.html)
   
-### 3A. [align_lifted_TRs.sh](https://github.com/caroladam/TR-evolution-analyses/blob/main/shared_trs/align_lifted_trs.sh)
+### 3A. [align_lifted_TRs.sh](https://github.com/caroladam/track/blob/main/shared_trs/align_lifted_trs.sh)
 
 This script processes tandem repeat (TR) data from two genomes, aligns the TR motif sequences, and calculates alignment similarity scores.
 The script expects specific BED file fields - those resulting from [Step 1C](https://github.com/caroladam/TR-evolution-analyses/blob/main/tr_catalog/filter_tr_catalog.sh). If you are using your own TR catalogs, please refer to the same BED file structure.
@@ -152,7 +152,7 @@ The script expects specific BED file fields - those resulting from [Step 1C](htt
 - `sim_score_<target_prefix>_<query_prefix>`: File containing similarity scores for the pairwise alignment of TR motifs from target and query genomes.
 - `sim_score_50_50_<target_prefix>_<query_prefix>.bed`: Filtered BED file with overlapping TRs having at least 50% motif alignment similarity
 
-### 3B. [get_putative_homology.sh](https://github.com/caroladam/TR-evolution-analyses/blob/main/shared_trs/get_putative_homologous_catalog.sh)
+### 3B. [get_putative_homology.sh](https://github.com/caroladam/track/blob/main/shared_trs/get_putative_homologous_catalog.sh)
 
 This script processes tandem repeats (TRs) shared between two genomes and creates a putative homologous TR catalog for a species pair.
 
@@ -172,7 +172,7 @@ This script processes tandem repeats (TRs) shared between two genomes and create
 
 The final output file is named `homologous_tr_catalog.bed` and contains the putative homologous TR catalog for the species pair.
 
-### 3C. [run_plot_shared_tr.sh](https://github.com/caroladam/TR-evolution-analyses/blob/main/shared_trs/run_plot_shared_tr.sh)
+### 3C. [run_plot_shared_tr.sh](https://github.com/caroladam/track/blob/main/shared_trs/run_plot_shared_tr.sh)
 
 This script calls R to create a scatterplot comparing TR lengths between two species based on the file `homologous_tr_catalog.bed` made in the previous step.
 
@@ -197,7 +197,7 @@ The final output is a scatterplot with a regression line with R2 value and a dia
 
 The following example shows the total length comparison of TR shared between the human and chimpanzee T2T reference genomes:
 
-![Scatterplot of human and chimp shared TR length](https://github.com/caroladam/TR-evolution-analyses/blob/main/shared_trs/homo_chimp_length.svg)
+![Scatterplot of human and chimp shared TR length](https://github.com/caroladam/track/blob/main/shared_trs/homo_chimp_length.png)
 
 # Genotyping Tandem Repeats
 
@@ -233,7 +233,7 @@ TRGT requires alignment files to be sorted and indexed.
 
 `samtools index <sorted.bam> <sorted.bam.bai>`: Index your sorted BAM file.
 
-### Run [trgt_genotype.sh](https://github.com/caroladam/TR-evolution-analyses/blob/main/genotype/trgt_genotype.sh)
+### Run [trgt_genotype.sh](https://github.com/caroladam/track/blob/main/genotype/trgt_genotype.sh)
 This script is designed to automate the process of tandem repeat genotyping using the TRGT genotype function. After genotyping, it sorts and indexes both VCF and BAM output files.
 
 **Usage**
@@ -260,7 +260,7 @@ BAM Files:
 - The BAM output is sorted and saved as `output_prefix_sorted.spanning.bam` and contains the chunks of the HiFi reads that span the TR variant.
 - An index is created for the sorted BAM file `output_prefix_sorted.spanning.bam.bai`.
 
-### Run [trgt_merge.sh](https://github.com/caroladam/TR-evolution-analyses/blob/main/genotype/trgt_merge.sh)
+### Run [trgt_merge.sh](https://github.com/caroladam/track/blob/main/genotype/trgt_merge.sh)
 This script merges multiple VCF files generated from [trgt_genotype.sh](https://github.com/caroladam/TR-evolution-analyses/blob/main/genotype/trgt_genotype.sh) using the TRGT merge function.
 
 **Usage**
@@ -280,7 +280,7 @@ This script merges multiple VCF files generated from [trgt_genotype.sh](https://
 The final output is saved as `output_prefix_merged.vcf.gz` and contains the merged TR variants across all genotyped samples.
 
 # Population genetics summary statistics
-## Run [get_summary_stats.sh](https://github.com/caroladam/TR-evolution-analyses/blob/main/popgen_analysis/get_summary_stats.sh)
+## Run [get_summary_stats.sh](https://github.com/caroladam/track/blob/main/popgen_analysis/get_summary_stats.sh)
 
 This script processes a VCF file and a population assignment file to calculate basic population genetic statistics using R, then generates violin plots for observed heterozygosity (Ho) and genetic diversity (Hs) across populations.
 
