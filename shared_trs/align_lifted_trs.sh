@@ -6,7 +6,7 @@ usage() {
 }
 
 # Parse command-line options
-while getopts ":l:c:t:q:o:a" opt
+while getopts ":l:c:t:q:o:a:" opt
 do
     case ${opt} in
         l) lifted_trs="$OPTARG" ;;
@@ -29,7 +29,7 @@ fi
 for cmd in bedtools awk needle parallel grep paste sed
 do
     if ! command -v "$cmd" &> /dev/null
-then
+    then
         echo "Error: $cmd is not installed or not in PATH."
         exit 1
     fi
