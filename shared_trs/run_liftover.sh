@@ -18,13 +18,13 @@ while getopts "i:c:o:u:l:" opt; do
 done
 
 # Check if all arguments are provided
-if [ -z "$input_bed_file" ] || [ -z "$chain_file" ] || [ -z "$output_bed_file" ] || [ -z "$unmapped_file" ] || [ -z "$liftOver_dir" ]; then
+if [ -z "$input_bed" ] || [ -z "$chain_file" ] || [ -z "$output_bed" ] || [ -z "$unmapped_file" ] || [ -z "$liftOver_dir" ]; then
     echo "Insufficient arguments."
     usage
 fi
 
 echo "Running liftOver"
 
-"$liftOver_dir"/liftOver -bedPlus=3 -tab "$input_bed_file" "$chain_file" "$output_bed_file" "$unmapped_file"
+"$liftOver_dir"/liftOver -bedPlus=3 -tab "$input_bed" "$chain_file" "$output_bed" "$unmapped_file"
 
-echo "liftOver completed. Lifted TRs saved to $output_bed_file, unmapped TRs saved to $unmapped_file."
+echo "liftOver completed. Lifted TRs saved to $output_bed, unmapped TRs saved to $unmapped_file."
