@@ -30,7 +30,7 @@ echo "Running TRGT genotype function"
 echo "Genotyping completed. VCF and BAM outputs saved with prefix $output_prefix"
 
 echo "Sorting and indexing VCF file"
-bcftools sort -Ob -o "${output_prefix}_sorted.vcf.gz" "${output_prefix}.vcf.gz"
+bcftools sort -Oz -o "${output_prefix}_sorted.vcf.gz" "${output_prefix}.vcf.gz"
 bcftools index "${output_prefix}_sorted.vcf.gz"
 echo "VCF file sorted and indexed: ${output_prefix}_sorted.vcf.gz"
 
