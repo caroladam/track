@@ -2,6 +2,9 @@
 
 The Tandem Repeat Analysis and Comparison Kit (TRACK) is an automated workflow designed to identify and compare tandem repeats (TRs) across species, and genotype catalogs in population-wide data. The pipeline includes scripts for creating TR catalogs from reference genomes, filtering TRs, generating catalogs of putative homologous TRs, and performing population-level genotyping and basic population genetics analyses. TRACK also includes scripts for visualizing TR length comparisons between species and key population genetics statistics. 
 
+### ⚠️ Early version warning ⚠️
+This repository contains an early version of the pipeline and is still under active development. Please note that breaking changes and improvements are expected as the project evolves. We recommend regularly checking for updates and reviewing documentation before using the pipeline.
+
 ### TRACK pipeline
 ![track_workflow](https://github.com/caroladam/track/blob/main/manual/track_workflow.png)
 
