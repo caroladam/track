@@ -6,13 +6,10 @@ channels:
 
 dependencies:
   # Core dependencies
-  - python=3.9       
+  - python>=2.7       
   - snakemake         
   - pandas            
-  - numpy             
-  - biopython         
-  - matplotlib        
-  - seaborn           
+  - numpy                                      
 
   # Bioinformatics-specific dependencies
   - samtools          
@@ -27,4 +24,10 @@ dependencies:
 
   # R and related libraries
   - r-base            
-  - r-tidyverse                   
+  - r-tidyverse       
+  - r-ggplot2        
+  - r-dplyr           
+  - r-vcfR            
+  - r-hierfstat       
+  - r-viridis        
+  - r-tidyr                   
