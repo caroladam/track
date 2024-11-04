@@ -1,15 +1,5 @@
 #!/usr/bin/env Rscript
 
-# Chek if required packages are installed
-install_if_missing <- function(pkg) {
-    if (!requireNamespace(pkg, quietly = TRUE)) {
-        install.packages(pkg, dependencies = TRUE)
-    }
-}
-
-required_packages <- c("vcfR", "hierfstat", "ggplot2", "dplyr", "viridis", "tidyr")
-lapply(required_packages, install_if_missing)
-
 # Load libraries
 library(vcfR)
 library(hierfstat)
