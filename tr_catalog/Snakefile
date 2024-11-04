@@ -1,0 +1,37 @@
+import glob
+import os
+
+configfile: "config.yaml"
+
+# Rule to ensure all outputs are generated
+rule all:
+    input:
+        f"{config['output_prefix']}_catalog.no_overlaps.bed"
+
+rule run_trf_script:
+    input:
+        fasta_dir=glob.glob(os.path.join(config["fasta_path"], "*.fa")),
+        trf_run_script=config["trf_run_script"]
+    output:
+        expand("trf_results/{prefix}.fa.dat", prefix=glob_wildcards("split_chr_fa/{prefix}.fa").prefix)
+    params:
+        trf_dir=config["trf_dir"]
+    shell:
+        """
+        bash {input.trf_run_script} -g {input.fasta_dir} -t {params.trf_dir}
+        echo "TRF processing completed. Tandem repeat data per chromosome is available at trf_results"
+        """
+
+rule filter_catalog:
+    input:
+        expand("trf_results/{prefix}.fa.dat", prefix=glob_wildcards("split_chr_fa/{prefix}.fa").prefix)    
+    output:
+        f"{config['output_prefix']}_catalog.no_overlaps.bed"
+    params:
+        filter_catalog_script=config["filter_catalog_script"],
+        outfile=f"{config['output_prefix']}"
+    shell:
+        """
+        bash {params.filter_catalog_script} trf_results/ {params.outfile}
+        touch {output}
+        """
