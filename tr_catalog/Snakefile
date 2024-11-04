@@ -14,11 +14,9 @@ rule run_trf_script:
         trf_run_script=config["trf_run_script"]
     output:
         expand("trf_results/{prefix}.fa.dat", prefix=glob_wildcards("split_chr_fa/{prefix}.fa").prefix)
-    params:
-        trf_dir=config["trf_dir"]
     shell:
         """
-        bash {input.trf_run_script} -g {input.fasta_dir} -t {params.trf_dir}
+        bash {input.trf_run_script} -g {input.fasta_dir}
         echo "TRF processing completed. Tandem repeat data per chromosome is available at trf_results"
         """
 
