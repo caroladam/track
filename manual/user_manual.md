@@ -4,15 +4,6 @@ This tutorial will guide you through using TRACK to identify and filter TRs in r
 ## Creating TR catalogs
 **Obs:** If you already have the TR catalogs for your species of interest, skip Step 1.
 
-**Prerequisites**
-
-- [samtools](https://www.htslib.org/download/)
-- [TRF (Tandem Repeats Finder)](https://tandem.bu.edu/trf/home)
-- [BEDOPS](https://bedops.readthedocs.io/en/latest/)
-- [bedtools](https://bedtools.readthedocs.io/en/latest/content/installation.html)
-
-Ensure these tools are installed and available in your PATH or provide absolute paths for each tool.
-
 **Configuration**
 
 ```
@@ -66,12 +57,11 @@ chr1	12553	12571	18	1	19.0	A	AAAAAAAAAAAAAACAAAA	homo
 
 ## Homology Assessment and Comparative TR Analysis
 
-**Prerequisites**
+**Prerequisite**
 
-- [Liftover Tools](https://genome.ucsc.edu/cgi-bin/hgLiftOver)
-- [EMBOSS Needle](https://embossgui.sourceforge.net/demo/manual/needle.html)
-- [bedtools](https://bedtools.readthedocs.io/en/latest/content/installation.html)
-- [Chain files](https://genome.ucsc.edu/goldenpath/help/chain.html) between species of interest. Go to **DIY chain file** if you cannot find your desired chain files at [USCS Genome Browser](https://hgdownload.soe.ucsc.edu/downloads.html). To run the analysis with our example data, access chain files of T2T Human and Chimpanzee alignments [here](https://www.dropbox.com/home/track/chain_files).
+You will need [Chain files](https://genome.ucsc.edu/goldenpath/help/chain.html) between species of interest.
+
+Go to **DIY chain file** if you cannot find your desired chain files at [USCS Genome Browser](https://hgdownload.soe.ucsc.edu/downloads.html).
 
 **Configuration**
 
@@ -144,12 +134,6 @@ The following example shows a scatterplot of human and chimp TR length from a su
 
 You can use your new catalog generated from Step 1 to genotype TRs in your population data!
 TRACK uses [Tandem Repeat Genotyping Tool (TRGT)](https://github.com/PacificBiosciences/trgt) to genotype TRs in PacBio HiFi data. 
-
-**Prerequisites**
-- [Tandem Repeat Genotyping Tool (TRGT)](https://github.com/PacificBiosciences/trgt)
-- [samtools](https://www.htslib.org/download/)
-- [bcftools](https://github.com/samtools/bcftools)
-- Alignment files in BAM format.
 
 TRGT has an excellent [user manual](https://github.com/PacificBiosciences/trgt/blob/main/docs/tutorial.md) with examples, but below are some tips to go through genotyping smoothly.
 
