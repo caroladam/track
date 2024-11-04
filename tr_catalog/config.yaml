@@ -1,5 +1,4 @@
 fasta_path: "data/"
-trf_dir: "~/Downloads/TRF-4.09.1/src"
 trf_run_script: "scripts/run_TRF.sh"
 filter_catalog_script: "scripts/filter_tr_catalog.sh"
 output_prefix: "homo"
