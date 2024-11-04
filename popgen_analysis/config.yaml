@@ -1,0 +1,2 @@
+vcf_file: "data/merged.vcf.gz"
+popinfo_file: "data/popinfo.txt"
