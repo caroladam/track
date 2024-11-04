@@ -1,0 +1,125 @@
+import os
+
+configfile: "config.yaml"
+
+# Main rule to ensure everything runs
+rule all:
+    input:
+        f"homologous_tr_catalog.bed"
+
+# Rule to create results directories
+rule create_results_directories:
+    output:
+        directory("lifted_results"),
+        directory("sim_results")
+    shell:
+        "mkdir -p lifted_results sim_results"
+
+# Rule to perform liftOver from genome1 to genome2
+rule run_liftOver_genome1_to_genome2:
+    input:
+        input_bed=config["input_bed_genome1"],
+        chain_file=config["genome1_to_genome2_chain"]
+    output:
+        output_bed=f"lifted_results/{config['output_prefix_genome1_to_genome2']}.bed",
+        unmapped_file=f"lifted_results/{config['output_prefix_genome1_to_genome2']}_unmapped.bed"
+    params:
+        liftOver_dir=config["liftOver_directory"]
+    shell:
+        """
+        # Create a temporary modified bed file
+        modified_bed=$(mktemp)
+        # Append the first three columns at the end of each line with tab separation
+        awk 'BEGIN {{OFS="\\t"}} {{print $0, $1, $2, $3}}' {input.input_bed} > $modified_bed
+        # Run liftOver using the modified bed file
+        {params.liftOver_dir}/liftOver -bedPlus=3 -tab $modified_bed {input.chain_file} {output.output_bed} {output.unmapped_file} || exit 1
+        # Clean up temporary modified bed file
+        rm $modified_bed
+        echo "LiftOver from genome1 to genome2 completed."
+        """
+
+# Rule to perform liftOver from genome2 to genome1
+rule run_liftOver_genome2_to_genome1:
+    input:
+        input_bed=config["input_bed_genome2"],
+        chain_file=config["genome2_to_genome1_chain"]
+    output:
+        output_bed=f"lifted_results/{config['output_prefix_genome2_to_genome1']}.bed",
+        unmapped_file=f"lifted_results/{config['output_prefix_genome2_to_genome1']}_unmapped.bed"
+    params:
+        liftOver_dir=config["liftOver_directory"]
+    shell:
+        """
+        # Create a temporary modified bed file
+        modified_bed=$(mktemp)
+        # Append the first three columns at the end of each line with tab separation
+        awk 'BEGIN {{OFS="\\t"}} {{print $0, $1, $2, $3}}' {input.input_bed} > $modified_bed
+        # Run liftOver using the modified bed file
+        {params.liftOver_dir}/liftOver -bedPlus=3 -tab $modified_bed {input.chain_file} {output.output_bed} {output.unmapped_file} || exit 1
+        # Clean up temporary modified bed file
+        rm $modified_bed
+        echo "LiftOver from genome2 to genome1 completed."
+        """
+
+# Rule to run alignment similarity extraction for genome1 to genome2
+rule alignment_similarity_genome1_to_genome2:
+    input:
+        lifted_trs=f"lifted_results/{config['output_prefix_genome1_to_genome2']}.bed",
+        query_tr_catalog=config["input_bed_genome2"]
+    output:
+        sim_score_file=f"overlap{config['overlap_perc']}_sim{config['align_perc']}_{config['genome1']}_{config['genome2']}.bed"
+    params:
+        target_prefix=config["genome1"],  # genome1 is the target in this direction
+        query_prefix=config["genome2"],   # genome2 is the query
+        overlap_perc=config["overlap_perc"],
+        align_perc=config["align_perc"],
+        script=config["align_sh"]
+    shell:
+        """
+        bash {params.script} -l {input.lifted_trs} -c {input.query_tr_catalog} \
+            -t {params.target_prefix} -q {params.query_prefix} \
+            -o {params.overlap_perc} -a {params.align_perc}
+        """
+
+# Rule to run alignment similarity extraction for genome2 to genome1
+rule alignment_similarity_genome2_to_genome1:
+    input:
+        lifted_trs=f"lifted_results/{config['output_prefix_genome2_to_genome1']}.bed",
+        query_tr_catalog=config["input_bed_genome1"]
+    output:
+        sim_score_file=f"overlap{config['overlap_perc']}_sim{config['align_perc']}_{config['genome2']}_{config['genome1']}.bed"
+    params:
+        target_prefix=config["genome2"],  # genome2 is the target in this direction
+        query_prefix=config["genome1"],   # genome1 is the query
+        overlap_perc=config["overlap_perc"],
+        align_perc=config["align_perc"],
+        script=config["align_sh"]
+    shell:
+        """
+        bash {params.script} -l {input.lifted_trs} -c {input.query_tr_catalog} \
+            -t {params.target_prefix} -q {params.query_prefix} \
+            -o {params.overlap_perc} -a {params.align_perc}
+        """
+
+# Rule to get putative homolous catalog between genome1 and genome2
+rule create_homologous_tr_catalog:
+    input:
+        fst_genome_shared_trs=f"overlap{config['overlap_perc']}_sim{config['align_perc']}_{config['genome1']}_{config['genome2']}.bed",
+        snd_genome_shared_trs=f"overlap{config['overlap_perc']}_sim{config['align_perc']}_{config['genome2']}_{config['genome1']}.bed",
+        fst_genome_catalog=config["input_bed_genome1"],
+        snd_genome_catalog=config["input_bed_genome2"]
+    output:
+        homologous_catalog="homologous_tr_catalog.bed",
+        plot="homologous_tr_length_plot.svg"
+    params:
+        script=config["homologous_catalog_sh"],
+        r_script=config["plot_tr_length"],
+        species1=config["genome1"],
+        species2=config["genome2"]
+    shell:
+        """
+        bash {params.script} -a {input.fst_genome_shared_trs} -b {input.snd_genome_shared_trs} \
+            -c {input.fst_genome_catalog} -d {input.snd_genome_catalog}
+
+        Rscript {params.r_script} {output.homologous_catalog} {params.species1} {params.species2} {output.plot}
+        """
