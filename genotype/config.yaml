@@ -1,5 +1,5 @@
 reference_genome: "data/reference.fa"
 tandem_repeat_catalog: "data/catalog.bed"
-bam_dir: "data/bam"
+bam_dir: "data/"
 threads: "4"  # Adjust the number of threads as needed
 trgt_path: "~/Downloads/trgt-0.9.0/trgt-v1.0.0-x86_64-unknown-linux-gnu"
