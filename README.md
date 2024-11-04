@@ -15,6 +15,9 @@ cd track
 # Create and activate the conda environment:
 conda env create -f environment.yml
 conda activate track_env
+
+# Get necessary files to run examples:
+bash ./setup.sh
 ```
 
 Each directory within the repository contains example input data, allowing you to perform test runs and familiarize yourself with TRACK's functionalities.
