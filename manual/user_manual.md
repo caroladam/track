@@ -71,7 +71,7 @@ chr1	12553	12571	18	1	19.0	A	AAAAAAAAAAAAAACAAAA	homo
 - [Liftover Tools](https://genome.ucsc.edu/cgi-bin/hgLiftOver)
 - [EMBOSS Needle](https://embossgui.sourceforge.net/demo/manual/needle.html)
 - [bedtools](https://bedtools.readthedocs.io/en/latest/content/installation.html)
-- [Chain files](https://genome.ucsc.edu/goldenpath/help/chain.html) between species of interest. Go to **DIY chain file** if you cannot find your desired chain files at [USCS Genome Browser](https://hgdownload.soe.ucsc.edu/downloads.html)
+- [Chain files](https://genome.ucsc.edu/goldenpath/help/chain.html) between species of interest. Go to **DIY chain file** if you cannot find your desired chain files at [USCS Genome Browser](https://hgdownload.soe.ucsc.edu/downloads.html). To run the analysis with our example data, access chain files of T2T Human and Chimpanzee alignments [here](https://www.dropbox.com/home/track/chain_files).
 
 **Configuration**
 
