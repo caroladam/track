@@ -134,6 +134,11 @@ If the chain files for your species or assembly of interest are not available, y
   
   ./paf2chain -i `<spp1_spp2.paf>` > `<spp1_spp2.chain>`
 
+**Example**
+
+The following example shows a scatterplot of human and chimp TR length from a subset of shared tandem repeats.
+
+![Scatterplot of shared Human x Chimpanzee TR length](https://github.com/caroladam/track/blob/main/manual/example_plots/homo_chimp_length.png)
 
 ## Genotyping Tandem Repeats
 
@@ -234,4 +239,4 @@ snakemake --cores <number_of_cores>
 
 The following example shows observed heterozygosity estimates from a random subset of 1,000 TR loci from TRACK's human T2T TR catalog genotyped in individuals of the [Human Pangenome Reference Consortium (HPRC)](https://github.com/human-pangenomics/HPP_Year1_Data_Freeze_v1.0).
 
-![Violin plots of Observed Heterozygosity (Ho)](https://github.com/caroladam/track/blob/main/popgen_analysis/human_merged_random_subset_observed_heterozygosity.svg)
+![Violin plots of Observed Heterozygosity (Ho)](https://github.com/caroladam/track/blob/main/manual/example_plots/human_merged_random_subset_observed_heterozygosity.svg)
