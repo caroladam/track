@@ -30,11 +30,10 @@ rule trgt_genotype:
     params:
         output_prefix="{prefix}",
         threads=config['threads'],
-        trgt_path=config['trgt_path']
     shell:
         """
 	mkdir -p outputs
-        bash scripts/run_trgt_genotype.sh -r {input.ref_file} -t {input.tr_catalog} -b {input.bam_file} -p {params.output_prefix} -n {params.threads} -g {params.trgt_path}
+        bash scripts/run_trgt_genotype.sh -r {input.ref_file} -t {input.tr_catalog} -b {input.bam_file} -p {params.output_prefix} -n {params.threads} 
         mv {params.output_prefix}.vcf.gz outputs/
         mv {params.output_prefix}.spanning.bam outputs/
         """
@@ -72,11 +71,9 @@ rule merge_vcfs:
         vcfs=expand("outputs/{prefix}_sorted.vcf.gz", prefix=prefixes)
     output:
         merged_vcf="merged.vcf.gz"
-    params:
-        trgt_path=config['trgt_path'],
     shell:
         """
         echo "Merging VCF files from outputs directory: {input.vcfs}"
-        {params.trgt_path}/trgt merge --vcf {input.vcfs} -O z -o {output.merged_vcf}
+        trgt merge --vcf {input.vcfs} -O z -o {output.merged_vcf}
         echo "VCF merge completed. Output saved to {output.merged_vcf}"
         """
