@@ -1,21 +1,20 @@
 #!/bin/bash
 
 usage() {
-    echo "Usage: $0 -t <path_to_trf_executable> -g <fasta_dir>"
+    echo "Usage: $0 -g <fasta_dir>"
     exit 1
 }
 
 # Parse options
-while getopts "t:g:" opt; do
+while getopts "g:" opt; do
     case ${opt} in
-        t) trf_dir="$OPTARG" ;;
 	g) fasta_dir="$OPTARG" ;;
         *) usage ;;
     esac
 done
 
 # Check if all arguments are provided
-if [ -z "$trf_dir" ] || [ -z "$fasta_dir" ]; then
+if [ -z "$fasta_dir" ]; then
     echo "Insufficient arguments."
     usage
 fi
@@ -58,7 +57,7 @@ do
 		echo "Running TRF on $fasta_file with the following parameters:"
 		echo "matchscore=$matchscore mismatchscore=$mismatchscore indelscore=$indelscore matchprobability=$pm indelprobability=$pi minscore=$minscore maxperiod=$maxperiod"
 
-		"$trf_dir"/trf "$fasta_file" "$matchscore" "$mismatchscore" "$indelscore" "$pm" "$pi" "$minscore" "$maxperiod" -f -d -h -l 6
+		trf "$fasta_file" "$matchscore" "$mismatchscore" "$indelscore" "$pm" "$pi" "$minscore" "$maxperiod" -f -d -h -l 6
 done
 
 mkdir -p trf_results
