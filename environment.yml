@@ -1,0 +1,28 @@
+name: track_env   # Name of the conda environment
+channels:
+  - conda-forge   # Priority channels for packages
+  - bioconda      # Bioconda channel for bioinformatics tools
+  - defaults
+
+dependencies:
+  # Core dependencies
+  - python=3.9       
+  - snakemake         
+  - pandas            
+  - numpy             
+  - biopython         
+  - matplotlib        
+  - seaborn           
+
+  # Bioinformatics-specific dependencies
+  - samtools          
+  - bedtools
+  - bedops
+  - bcftools
+  - vcftools      
+  - emboss     
+
+  # R and related libraries
+  - r-base            
+  - r-tidyverse                   
+
