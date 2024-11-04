@@ -1,0 +1,82 @@
+import os
+import glob
+
+configfile: "config.yaml"
+
+# Find all BAM files in the specified directory
+bam_files = glob.glob(os.path.join(config['bam_dir'], "*.bam"))
+prefixes = [os.path.splitext(os.path.basename(bam_file))[0] for bam_file in bam_files]
+
+# Define prefix based on BAM file name
+def get_prefix(bam_file):
+    return os.path.splitext(os.path.basename(bam_file))[0]
+
+rule all:
+    input:
+        expand("outputs/{prefix}_sorted.vcf.gz", prefix=prefixes),
+        expand("outputs/{prefix}_sorted.spanning.bam", prefix=prefixes),
+        expand("outputs/{prefix}_sorted.vcf.gz.csi", prefix=prefixes),
+        expand("outputs/{prefix}_sorted.spanning.bam.bai", prefix=prefixes),
+        f"merged.vcf.gz"  # Ensure the merged output is correctly specified
+
+rule trgt_genotype:
+    input:
+        ref_file=config['reference_genome'],
+        tr_catalog=config['tandem_repeat_catalog'],
+        bam_file=lambda wildcards: f"{config['bam_dir']}/{wildcards.prefix}.bam"
+    output:
+        vcf="outputs/{prefix}.vcf.gz",
+        bam="outputs/{prefix}.spanning.bam"
+    params:
+        output_prefix="{prefix}",
+        threads=config['threads'],
+        trgt_path=config['trgt_path']
+    shell:
+        """
+	mkdir -p outputs
+        bash scripts/run_trgt_genotype.sh -r {input.ref_file} -t {input.tr_catalog} -b {input.bam_file} -p {params.output_prefix} -n {params.threads} -g {params.trgt_path}
+        mv {params.output_prefix}.vcf.gz outputs/
+        mv {params.output_prefix}.spanning.bam outputs/
+        """
+
+rule sort_index_vcf:
+    input:
+        vcf="outputs/{prefix}.vcf.gz"
+    output:
+        sorted_vcf="outputs/{prefix}_sorted.vcf.gz",
+        csi="outputs/{prefix}_sorted.vcf.gz.csi"
+    shell:
+        """
+        echo "Sorting VCF for {wildcards.prefix}..."
+        bcftools sort -Oz -o {output.sorted_vcf} {input.vcf}
+        bcftools index {output.sorted_vcf}
+        rm {input.vcf}
+        """
+
+rule sort_index_bam:
+    input:
+        bam="outputs/{prefix}.spanning.bam"
+    output:
+        sorted_bam="outputs/{prefix}_sorted.spanning.bam",
+        bai="outputs/{prefix}_sorted.spanning.bam.bai"
+    shell:
+        """
+        echo "Sorting BAM for {wildcards.prefix}..."
+        samtools sort -o {output.sorted_bam} {input.bam}
+        samtools index {output.sorted_bam}
+        rm {input.bam}
+        """
+
+rule merge_vcfs:
+    input:
+        vcfs=expand("outputs/{prefix}_sorted.vcf.gz", prefix=prefixes)
+    output:
+        merged_vcf="merged.vcf.gz"
+    params:
+        trgt_path=config['trgt_path'],
+    shell:
+        """
+        echo "Merging VCF files from outputs directory: {input.vcfs}"
+        {params.trgt_path}/trgt merge --vcf {input.vcfs} -O z -o {output.merged_vcf}
+        echo "VCF merge completed. Output saved to {output.merged_vcf}"
+        """
