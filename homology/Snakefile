@@ -23,8 +23,6 @@ rule run_liftOver_genome1_to_genome2:
     output:
         output_bed=f"lifted_results/{config['output_prefix_genome1_to_genome2']}.bed",
         unmapped_file=f"lifted_results/{config['output_prefix_genome1_to_genome2']}_unmapped.bed"
-    params:
-        liftOver_dir=config["liftOver_directory"]
     shell:
         """
         # Create a temporary modified bed file
@@ -32,7 +30,7 @@ rule run_liftOver_genome1_to_genome2:
         # Append the first three columns at the end of each line with tab separation
         awk 'BEGIN {{OFS="\\t"}} {{print $0, $1, $2, $3}}' {input.input_bed} > $modified_bed
         # Run liftOver using the modified bed file
-        {params.liftOver_dir}/liftOver -bedPlus=3 -tab $modified_bed {input.chain_file} {output.output_bed} {output.unmapped_file} || exit 1
+        liftOver -bedPlus=3 -tab $modified_bed {input.chain_file} {output.output_bed} {output.unmapped_file} || exit 1
         # Clean up temporary modified bed file
         rm $modified_bed
         echo "LiftOver from genome1 to genome2 completed."
@@ -46,8 +44,6 @@ rule run_liftOver_genome2_to_genome1:
     output:
         output_bed=f"lifted_results/{config['output_prefix_genome2_to_genome1']}.bed",
         unmapped_file=f"lifted_results/{config['output_prefix_genome2_to_genome1']}_unmapped.bed"
-    params:
-        liftOver_dir=config["liftOver_directory"]
     shell:
         """
         # Create a temporary modified bed file
@@ -55,7 +51,7 @@ rule run_liftOver_genome2_to_genome1:
         # Append the first three columns at the end of each line with tab separation
         awk 'BEGIN {{OFS="\\t"}} {{print $0, $1, $2, $3}}' {input.input_bed} > $modified_bed
         # Run liftOver using the modified bed file
-        {params.liftOver_dir}/liftOver -bedPlus=3 -tab $modified_bed {input.chain_file} {output.output_bed} {output.unmapped_file} || exit 1
+        liftOver -bedPlus=3 -tab $modified_bed {input.chain_file} {output.output_bed} {output.unmapped_file} || exit 1
         # Clean up temporary modified bed file
         rm $modified_bed
         echo "LiftOver from genome2 to genome1 completed."
