@@ -6,9 +6,6 @@ input_bed_genome2: "data/pantro_catalog.bed"   # File for genome2 (e.g., PanTro)
 genome1_to_genome2_chain: "data/homo_to_pantro.chain"    # Chain file from genome1 to genome2
 genome2_to_genome1_chain: "data/pantro_to_homo.chain"    # Chain file from genome2 to genome1
 
-# Directory for liftOver tool
-liftOver_directory: "~/Downloads/"                       # Location of the liftOver executable
-
 # Output prefixes (derived from input or desired output filenames)
 output_prefix_genome1_to_genome2: "homo_to_pantro_lift"
 output_prefix_genome2_to_genome1: "pantro_to_homo_lift"
