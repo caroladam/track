@@ -1,0 +1,31 @@
+# Paths to input files
+input_bed_genome1: "data/homo_catalog.bed"     # File for genome1 (e.g., Homo)
+input_bed_genome2: "data/pantro_catalog.bed"   # File for genome2 (e.g., PanTro)
+
+# Chain files for liftOver
+genome1_to_genome2_chain: "data/homo_to_pantro.chain"    # Chain file from genome1 to genome2
+genome2_to_genome1_chain: "data/pantro_to_homo.chain"    # Chain file from genome2 to genome1
+
+# Directory for liftOver tool
+liftOver_directory: "~/Downloads/"                       # Location of the liftOver executable
+
+# Output prefixes (derived from input or desired output filenames)
+output_prefix_genome1_to_genome2: "homo_to_pantro_lift"
+output_prefix_genome2_to_genome1: "pantro_to_homo_lift"
+
+# Genome identifiers for dynamic naming
+genome1: "homo"         # Identifier for genome1
+genome2: "pantro"       # Identifier for genome2
+
+# Path to align_lifted_trs script
+align_sh: "scripts/align_lifted_trs.sh"
+
+# Path to get_homologous_catalog script
+homologous_catalog_sh: "scripts/get_putative_homologous_catalog.sh"
+
+# Path to plot_tr_length script
+plot_tr_length: "scripts/plot_shared_tr_length.R"
+
+# Alignment similarity parameters
+overlap_perc: "0.2"     # Minimum overlap percentage for alignment
+align_perc: "95.0"      # Minimum alignment percentage
