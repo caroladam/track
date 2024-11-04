@@ -1,0 +1,35 @@
+import os
+
+configfile: "config.yaml"
+
+# Function to get the prefix from the VCF filename
+def get_prefix(vcf_file):
+    return os.path.splitext(os.path.basename(vcf_file))[0]
+
+# Get the VCF prefix from the config
+vcf_prefix = get_prefix(config["vcf_file"])
+
+# Main rule to ensure everything runs
+rule all:
+    input:
+        f"{vcf_prefix}_observed_heterozygosity.csv",
+        f"{vcf_prefix}_genetic_diversity.csv",
+        f"{vcf_prefix}_observed_heterozygosity.svg",
+        f"{vcf_prefix}_genetic_diversity.svg"
+
+# Rule to run the R script
+rule run_r_script:
+    input:
+        vcf_file=config["vcf_file"],
+        popinfo_file=config["popinfo_file"]
+    output:
+        observed_heterozygosity="{vcf_prefix}_observed_heterozygosity.csv",
+        genetic_diversity="{vcf_prefix}_genetic_diversity.csv",
+        ho_plot="{vcf_prefix}_observed_heterozygosity.svg",
+        hs_plot="{vcf_prefix}_genetic_diversity.svg"
+    params:
+        r_script="scripts/summary_stats.R"
+    shell:
+        """
+        Rscript {params.r_script} {input.vcf_file} {input.popinfo_file}
+        """
