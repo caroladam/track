@@ -1,15 +1,5 @@
 #!/usr/bin/env Rscript
 
-# Check if required packages are installed
-install_if_missing <- function(pkg) {
-    if (!requireNamespace(pkg, quietly = TRUE)) {
-        install.packages(pkg, dependencies = TRUE)
-    }
-}
-
-required_packages <- c("ggplot2", "dplyr")
-lapply(required_packages, install_if_missing)
-
 library(ggplot2)
 library(dplyr)
 
