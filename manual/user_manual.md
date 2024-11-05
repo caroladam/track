@@ -10,7 +10,6 @@ This tutorial will guide you through using TRACK to identify and filter TRs in r
 #config.yaml
 
 fasta_path: "data/"                     # Path to input FASTA files
-trf_dir: "~/Downloads/TRF-4.09.1/src"   # Path to TRF directory
 trf_run_script: "scripts/run_TRF.sh"    # Path to TRF run script
 filter_catalog_script: "scripts/filter_tr_catalog.sh" # Path to catalog filter script
 output_prefix: "homo"                   # Prefix for output files
@@ -26,8 +25,13 @@ maxperiod: 2000
 ```
 
 ### **Usage**
-1. **Prepare input files:** Place reference genome FASTA file in the directory specified in `fasta_path` within `config.yaml`. Adjust the path to TRF executable and output prefix within `config.yaml`.
-2. **Run the pipeline:**
+1. **Prepare input files:** TRACK expects reference genomes to be split by chromosome. Place .fa files, one per chromosome, in the directory specified in `fasta_path` within `config.yaml`. Adjust output prefix within `config.yaml`.
+
+   You can split your reference by chromosome using:
+   ```
+   faidx -x <reference.fa>
+   ```
+3. **Run the pipeline:**
 ```
 snakemake --cores <number_of_cores>
 ```
@@ -37,7 +41,6 @@ snakemake --cores <number_of_cores>
 - 
 Intermediate files are saved in:
 - `trf_results/`: `.dat` files containing TR results per chromosome.
-- `split_chr_fa/`: stores split chromosome FASTA files, which are deleted after cataloging is completed.
 
 The `<output_prefix>_catalog.no_overlaps.bed` file contains the following fields: 
 - `<Chromosome>` `<Start>` `<End>` `<TRlength>` `<MotifLength>` `<CopyNumber>` `<MotifSeq>` `<TRSeq>` `<SppID>`
@@ -53,7 +56,7 @@ chr1	11719	11739	20	8	2.6	CAGTCCCT	CAGTCCCTCAGTCCCTCTGTC	homo
 chr1	12553	12571	18	1	19.0	A	AAAAAAAAAAAAAACAAAA	homo
 ```
 
-**Note:** The Homology assessment step below expects this BED file structure. If you want to use your own TR catalog, make sure it follows the structure.
+**Note:** The Homology assessment step below expects this BED file structure. If you'd like to use your TR catalog, please ensure it follows the structure.
 
 ## Homology Assessment and Comparative TR Analysis
 
@@ -75,9 +78,6 @@ input_bed_genome2: "data/pantro_catalog.bed"
 # Chain files for liftOver
 genome1_to_genome2_chain: "data/homo_to_pantro.chain"
 genome2_to_genome1_chain: "data/pantro_to_homo.chain"
-
-# Directory for liftOver tool
-liftOver_directory: "~/Downloads/"
 
 # Output prefixes
 output_prefix_genome1_to_genome2: "homo_to_pantro_lift"
@@ -178,7 +178,6 @@ reference_genome: "data/reference.fa"
 tandem_repeat_catalog: "data/catalog.bed" #Make sure the file follows TRGT expected structure
 bam_dir: "data/bam"
 threads: "4"  # Adjust as needed
-trgt_path: "~/Downloads/trgt-0.9.0/trgt-v1.0.0-x86_64-unknown-linux-gnu"
 ```
 ### **Usage**
 ```
