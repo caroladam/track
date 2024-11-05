@@ -47,9 +47,9 @@ track/
     ├── scripts
     └── Snakefile
 ```
-To perform test runs, simply enter the subdirectories and type:
+To perform test runs, enter the subdirectories and type:
 ```
-snakemake
+snakemake --cores <integer>
 ```
 
 ## User's manual
