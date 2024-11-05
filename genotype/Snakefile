@@ -29,7 +29,7 @@ rule trgt_genotype:
         bam="outputs/{prefix}.spanning.bam"
     params:
         output_prefix="{prefix}",
-        threads=config['threads'],
+        threads=config['threads']
     shell:
         """
 	mkdir -p outputs
