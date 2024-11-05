@@ -10,19 +10,18 @@ rule all:
 
 rule run_trf_script:
     input:
-        fasta_dir=glob.glob(os.path.join(config["fasta_path"], "*.fa")),
+        fasta_file=lambda wildcards: os.path.join(config["fasta_path"], f"{wildcards.prefix}.fa"),
         trf_run_script=config["trf_run_script"]
     output:
-        expand("trf_results/{prefix}.fa.dat", prefix=glob_wildcards("split_chr_fa/{prefix}.fa").prefix)
+        os.path.join("trf_results", "{prefix}.fa.dat")
     shell:
         """
-        bash {input.trf_run_script} -g {input.fasta_dir}
-        echo "TRF processing completed. Tandem repeat data per chromosome is available at trf_results"
+        bash {input.trf_run_script} -f {input.fasta_file}
         """
 
 rule filter_catalog:
     input:
-        expand("trf_results/{prefix}.fa.dat", prefix=glob_wildcards("split_chr_fa/{prefix}.fa").prefix)    
+        expand("trf_results/{prefix}.fa.dat", prefix=[os.path.basename(f).replace('.fa', '') for f in glob.glob(os.path.join(config["fasta_path"], "*.fa"))])
     output:
         f"{config['output_prefix']}_catalog.no_overlaps.bed"
     params:
