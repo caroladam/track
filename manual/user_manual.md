@@ -56,7 +56,7 @@ chr1	11719	11739	20	8	2.6	CAGTCCCT	CAGTCCCTCAGTCCCTCTGTC	homo
 chr1	12553	12571	18	1	19.0	A	AAAAAAAAAAAAAACAAAA	homo
 ```
 
-**Note:** The Homology assessment step below expects this BED file structure. If you'd like to use your TR catalog, please ensure it follows the structure.
+**Important Note:** The Homology assessment step below expects this specific BED file structure. If you'd like to use your TR catalog, please ensure it follows the structure.
 
 ## Homology Assessment and Comparative TR Analysis
 
@@ -64,7 +64,7 @@ chr1	12553	12571	18	1	19.0	A	AAAAAAAAAAAAAACAAAA	homo
 
 You will need [Chain files](https://genome.ucsc.edu/goldenpath/help/chain.html) between species of interest.
 
-Go to **DIY chain file** if you cannot find your desired chain files at [USCS Genome Browser](https://hgdownload.soe.ucsc.edu/downloads.html).
+If you cannot find your desired chain files at [USCS Genome Browser](https://hgdownload.soe.ucsc.edu/downloads.html), go to ** DIY chain file ** below.
 
 **Configuration**
 
@@ -93,8 +93,8 @@ homologous_catalog_sh: "scripts/get_putative_homologous_catalog.sh"
 plot_tr_length: "scripts/plot_shared_tr_length.R"
 
 # Similarity parameters
-overlap_perc: "0.2"
-align_perc: "95.0"
+overlap_perc: "0.2" # Minimum percentage overlap between TR regions
+align_perc: "95.0" # Minimum alignment similarity between TR motifs
 ```
 
 ### **Usage**
