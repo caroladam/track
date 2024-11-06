@@ -1,6 +1,6 @@
 # TRACK - Tandem Repeat Analysis and Comparison Kit
 
-The Tandem Repeat Analysis and Comparison Kit (TRACK) is an automated Snakemake workflow designed to identify and compare tandem repeats (TRs) across species, and genotype catalogs in population-wide data. The pipeline includes scripts for creating and filtering TR catalogs from reference genomes, generating catalogs of putative homologous TRs between species pairs, and performing population-level genotyping and basic population genetics analyses. Additionally, TRACK features tools for visualizing TR length comparisons between species and essential population genetic metrics, such as genetic diversity and observed heterozygosity.
+The Tandem Repeat Analysis and Comparison Kit (**TRACK**) is an automated Snakemake workflow designed to identify and compare tandem repeats (TRs) across species, and genotype catalogs in population-wide data. The pipeline includes scripts for creating and filtering TR catalogs from reference genomes, generating catalogs of putative homologous TRs between species pairs, and performing population-level genotyping and basic population genetics analyses. Additionally, TRACK features tools for visualizing TR length comparisons between species and essential population genetic metrics, such as genetic diversity and observed heterozygosity.
 
 ![track_workflow](https://github.com/caroladam/track/blob/main/manual/track_workflow.png)
 
@@ -25,15 +25,13 @@ Each directory within the repository contains example input data, allowing you t
 **Repository structure**
 ```
 track/
-├── tr_catalog
-│   ├── config.yaml
-│   ├── data
-│   ├── scripts
-│   └── Snakefile
+├── environment.yml
+├── LICENSE
+├── README.md
+├── setup.sh
 ├── genotype
 │   ├── config.yaml
 │   ├── data
-│   ├── homo_catalog.bed
 │   ├── scripts
 │   └── Snakefile
 ├── homology
@@ -41,11 +39,23 @@ track/
 │   ├── data
 │   ├── scripts
 │   └── Snakefile
-└── popgen_analysis
+├── manual
+│   ├── example_plots
+│   ├── track_workflow.png
+│   └── user_manual.md
+├── popgen_analysis
+│   ├── config.yaml
+│   ├── data
+│   ├── scripts
+│   └── Snakefile
+└── tr_catalog
     ├── config.yaml
     ├── data
     ├── scripts
     └── Snakefile
+
+14 directories, 14 files
+
 ```
 To perform test runs, enter the subdirectories and type:
 ```
@@ -68,7 +78,7 @@ Filtered catalogs can be downloaded here:
 - _[Symphalangus syndactylus](https://www.dropbox.com/scl/fi/jfw6bmjuhkw5kyzi4olp4/symsyn_trf.bed.no_overlaps?rlkey=vngw7jzmr7ejnuynd37mmeu7k&st=fsdurk82&dl=0)_
 
 ### ⚠️ Tool Development Warning ⚠️
-This repository is constantly being developed and improved, and users may encounter changes and updates. We recommend regularly checking for updates and reviewing the documentation to ensure optimal pipeline usage.
+This repository is constantly being developed and improved; users may encounter changes and updates. We recommend regularly checking for updates and reviewing the documentation to ensure optimal pipeline usage.
 
 ## Questions?
 Send your questions or suggestions to carolinaladam@gmail.com
