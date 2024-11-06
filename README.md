@@ -68,7 +68,7 @@ Filtered catalogs can be downloaded here:
 - _[Symphalangus syndactylus](https://www.dropbox.com/scl/fi/jfw6bmjuhkw5kyzi4olp4/symsyn_trf.bed.no_overlaps?rlkey=vngw7jzmr7ejnuynd37mmeu7k&st=fsdurk82&dl=0)_
 
 ### ⚠️ Tool Development Warning ⚠️
-This repository is in constant development and improvement, and users may encounter changes and updates. We recommend regularly checking for updates and reviewing the documentation to ensure optimal usage of the pipeline.
+This repository is constantly being developed and improved, and users may encounter changes and updates. We recommend regularly checking for updates and reviewing the documentation to ensure optimal pipeline usage.
 
 ## Questions?
 Send your questions or suggestions to carolinaladam@gmail.com
