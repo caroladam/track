@@ -37,7 +37,7 @@ done
 
 # Intersect regions of the lifted TRs file with TRF catalog for the query genome - keeping those with threshold reciprocal overlap
 shared_trs="shared_trs.bed"
-bedtools intersect -a "$lifted_trs" -b "$query_tr_catalog" -wa -wb -f "$overlap_perc" > "$shared_trs"
+bedtools intersect -a "$lifted_trs" -b "$query_tr_catalog" -wa -wb -f "$overlap_perc" -F "$overlap_perc" -e > "$shared_trs"
 
 # Create directories for fasta files and aligned files
 fasta_dir="fasta_XXXXXX_${target_prefix}_${query_prefix}"
