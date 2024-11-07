@@ -1,5 +1,16 @@
 #!/usr/bin/env Rscript
 
+install_if_missing <- function(pkg) {
+    if (!require(pkg, character.only = TRUE)) {
+        install.packages(pkg, repos = "https://cloud.r-project.org/")
+        library(pkg, character.only = TRUE)
+    }
+}
+
+# Check and install required packages
+packages <- c("ggplot2","dplyr")
+lapply(packages, install_if_missing)
+
 library(ggplot2)
 library(dplyr)
 
