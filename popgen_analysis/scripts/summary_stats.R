@@ -1,5 +1,16 @@
 #!/usr/bin/env Rscript
 
+install_if_missing <- function(pkg) {
+    if (!require(pkg, character.only = TRUE)) {
+        install.packages(pkg, repos = "https://cloud.r-project.org/")
+        library(pkg, character.only = TRUE)
+    }
+}
+
+# Check and install required packages
+packages <- c("vcfR", "hierfstat", "ggplot2", "tidyr", "dplyr", "viridis")
+lapply(packages, install_if_missing)
+
 # Load libraries
 library(vcfR)
 library(hierfstat)
