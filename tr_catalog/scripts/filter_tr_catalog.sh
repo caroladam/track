@@ -62,7 +62,6 @@ bedmap --min-element "${catalog}.merged.bed" "${catalog}.sorted.bed" > "${catalo
 sed -i 's/\.000000//g' "${catalog}.no_overlaps.bed"
 
 rm "$catalog"
-rm -r split_chr_fa
 
 echo "### Tandem Repeat filtering completed successfully ###"
 echo ""
