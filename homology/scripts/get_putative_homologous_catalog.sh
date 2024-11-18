@@ -46,4 +46,5 @@ gawk -i inplace 'BEGIN {FS="\t"; OFS="\t"} {print $14, $15, $16, $17, $18, $19, 
 # Remove temporary files
 rm tmp*
 
-echo "You have a putative homologous TR catalog for your species pair!"
+echo ""
+echo "The file homologous_tr_catalog.bed contains the putative homologous TR catalog for your species pair!"
