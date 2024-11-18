@@ -128,7 +128,7 @@ If the chain files for your species or assembly of interest are not available, y
 
 The following example shows a scatterplot of human and chimp TR length from a subset of shared tandem repeats with an *overlap threshold = 0.1* and a *similarity score threshold = 95%*.
 
-![Scatterplot of shared Human x Chimpanzee TR length](https://github.com/caroladam/track/blob/main/manual/example_plots/homo_chimp_length.png)
+![Scatterplot of shared Human x Chimpanzee TR length](https://github.com/caroladam/track/blob/main/manual/example_plots/subset_homo_chimp_plot.svg)
 
 ## Genotyping Tandem Repeats
 
