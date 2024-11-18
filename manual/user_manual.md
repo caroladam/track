@@ -38,7 +38,7 @@ snakemake --cores <number_of_cores>
 
 **Outputs**
 - `<output_prefix>_catalog.no_overlaps.bed`: a catalog of TRs that have been filtered, merged, and sorted.
-- 
+
 Intermediate files are saved in:
 - `trf_results/`: `.dat` files containing TR results per chromosome.
 
@@ -56,7 +56,7 @@ chr1	11719	11739	20	8	2.6	CAGTCCCT	CAGTCCCTCAGTCCCTCTGTC	homo
 chr1	12553	12571	18	1	19.0	A	AAAAAAAAAAAAAACAAAA	homo
 ```
 
-**Important Note:** The Homology assessment step below expects this specific BED file structure. If you'd like to use your TR catalog, please ensure it follows the structure.
+**Important Note:** The Homology assessment step below expects this specific BED file structure. If you'd like to use your TR catalog, **please ensure it follows the structure**.
 
 ## Homology Assessment and Comparative TR Analysis
 
@@ -126,7 +126,7 @@ If the chain files for your species or assembly of interest are not available, y
 
 **Example**
 
-The following example shows a scatterplot of human and chimp TR length from a subset of shared tandem repeats.
+The following example shows a scatterplot of human and chimp TR length from a subset of shared tandem repeats with an *overlap threshold = 0.5* and a *similarity score threshold = 50%*.
 
 ![Scatterplot of shared Human x Chimpanzee TR length](https://github.com/caroladam/track/blob/main/manual/example_plots/homo_chimp_length.png)
 
