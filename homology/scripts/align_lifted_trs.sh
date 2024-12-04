@@ -31,20 +31,27 @@ for cmd in bedtools awk needle grep paste sed; do
     fi
 done
 
-# Intersect regions of the lifted TRs file with TRF catalog for the query genome
+# Intersect regions of the lifted TRs file (query to target) with TRF catalog for the query genome
+
 shared_trs="shared_trs_${target_prefix}_${query_prefix}.bed"
+sorted_shared_trs="shared_trs_${target_prefix}_${query_prefix}_sorted.bed"
+
 bedtools intersect -a "$lifted_trs" -b "$query_tr_catalog" -f "$overlap_perc" -F "$overlap_perc" -e -wa -wb > "$shared_trs"
 
-# Add species names and keep only columns of interest - index and motif sequence, then split file to keep one TR per file
+# Add species names and keep only columns of interest - index and motif sequence, then sort file
 gawk -i inplace -v tgt="$target_prefix" -v qry="$query_prefix" \
-    'BEGIN {FS="\t"; OFS="\t"} {print tgt"target", $1, $2, $3, $7, qry"query", $1, $2, $3, $19, $10, $11, $12, tgt"originalcatalog"}' "$shared_trs"
+    'BEGIN {FS="\t"; OFS="\t"} {print tgt"lifted", $13, $14, $15, $7, qry"query", $13, $14, $15, $19, $10, $11, $12, tgt"originalcatalog"}' "$shared_trs"
+
+sort -k1,1 -k2,2n "$shared_trs" > "$sorted_shared_trs"
+
+rm "$shared_trs"
 
 # Create base directory for chunks
 chunk_dir="chunks_${target_prefix}_${query_prefix}"
 mkdir -p "$chunk_dir"
 
 # Split `shared_trs` file into 10,000-line chunks in the chunk directory
-split -l 10000 "$shared_trs" "$chunk_dir/chunk_"
+split -l 10000 "$sorted_shared_trs" "$chunk_dir/chunk_"
 
 echo "Running Needle for $target_prefix (as target) and $query_prefix (as query)."
 echo "This might take a while."
@@ -57,7 +64,7 @@ for chunk in "$chunk_dir"/chunk_*; do
     mkdir -p "$chunk_subdir"
     mv "$chunk" "$chunk_subdir/"
 
-    # Inside each subdirectory, split each chunk file into single-line files
+    # Inside each subdirectory, split each chunk file into single-line files to prepare for alignment
     cd "$chunk_subdir" || exit
     split -l 1 "$(basename "$chunk")" line_
 
@@ -84,10 +91,10 @@ for chunk in "$chunk_dir"/chunk_*; do
     output_file="${aligned_dir}/sim_score_overlap${overlap_perc}_${target_prefix}_${query_prefix}.txt"
     filtered_file="${aligned_dir}/sim_score_overlap${overlap_perc}_${target_prefix}_${query_prefix}_filtered.txt"
 
-    # Extract similarity scores for each TR alignment
+    # Extract similarity scores for each pairwise TR alignment
     grep "Similarity" "${aligned_dir}"/*.out | grep -o "[0-9]*\.[0-9]" > "$score_file"
 
-    # Extract locations
+    # Extract chromosome locations for each TR
     grep ">${query_prefix}" "${aligned_dir}"/*.out | sed 's/.*>//' > "$bedloc_file"
 
     # Combine locations and scores into final output
@@ -95,7 +102,7 @@ for chunk in "$chunk_dir"/chunk_*; do
     awk -v align_perc="$align_perc" '$2 >= align_perc' "$output_file" > "$filtered_file"
     rm "${aligned_dir}"/*.out
 
-    # Return to parent directory after processing chunk
+    # Return to parent directory after processing chunk and remove chunk sub-directories
     cd - > /dev/null || exit
     rm -r "$chunk_subdir"
 done
@@ -105,11 +112,13 @@ echo "Calculating similarity scores"
 final_output="overlap${overlap_perc}_sim${align_perc}_${target_prefix}_${query_prefix}.bed"
 find "$chunk_dir" -type f -name "*_filtered.txt" -exec cat {} + > "$final_output"
 sed -i 's/_/\t/g' "$final_output"
+
+# Organize file into BED structure
 gawk -i inplace 'BEGIN {FS="\t"; OFS="\t"} {print $2, $3, $4, $1, $5, $6, $7, $8, $9}' "$final_output"
 
-# Cleanup
+# Cleanup intermediate files
 rm -r "$chunk_dir"
-rm "$shared_trs"
+rm "$sorted_shared_trs"
 
 echo ""
 echo "Processing completed."
