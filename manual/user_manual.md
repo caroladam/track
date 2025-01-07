@@ -27,10 +27,10 @@ maxperiod: 2000
 ### **Usage**
 1. **Prepare input files:** TRACK expects reference genomes to be split by chromosome. Place .fa files, one per chromosome, in the directory specified in `fasta_path` within `config.yaml`. Adjust output prefix within `config.yaml`.
 
-   You can split your reference by chromosome using:
-   ```
-   faidx -x <reference.fa>
-   ```
+You can split your reference by chromosome using:
+```
+faidx -x <reference.fa>
+```
 3. **Run the pipeline:**
 ```
 snakemake --cores <number_of_cores>
@@ -98,7 +98,7 @@ align_perc: "95.0" # Minimum alignment similarity between TR motifs
 ```
 
 ### **Usage**
-1. **Prepare input files:** Place TR catalogs for both species and chain files corresponding to alignments in both directions in the `data/` directory. Adjust the path to LiftOver executable, genome identifiers, prefixes, and overlap and alignment similarity within `config.yaml`.
+1. **Prepare input files:** Place TR catalogs for both species and chain files corresponding to alignments in both directions in the `data/` directory. Adjust genome identifiers, prefixes, and overlap and alignment similarity within `config.yaml`.
 2. **Run the pipeline:**
 ```
 snakemake --cores <number_of_cores>
@@ -108,6 +108,12 @@ snakemake --cores <number_of_cores>
 - `homologous_tr_catalog.bed`: Contains putative homologous TRs between the two genomes.
 - `homologous_tr_length_plot.svg`: Visual comparison of TR lengths in the homologous catalog for each genome.
 
+**Example**
+
+The following example shows a scatterplot of human and chimp TR length from a subset of shared tandem repeats with an *overlap threshold = 0.1* and a *similarity score threshold = 95%*.
+
+![Scatterplot of shared Human x Chimpanzee TR length](https://github.com/caroladam/track/blob/main/manual/example_plots/subset_homo_chimp_plot.svg)
+
 **BONUS: DIY Chain file**
 
 If the chain files for your species or assembly of interest are not available, you can produce a custom-made chain file with the following steps:
@@ -116,19 +122,13 @@ If the chain files for your species or assembly of interest are not available, y
 
   **Example**
 
-  ./minimap2 --cs --eqx -cx asm20 `<path_to_spp1_ref>` `<path_to_spp2_ref>` > `<spp1_spp2.paf>
+  ./minimap2 --cs --eqx -cx asm20 `<path_to_spp1_ref>` `<path_to_spp2_ref>` > `<spp1_spp2.paf>`
 
 - Convert PAF alignment to CHAIN using [paf2chain.py](https://github.com/AndreaGuarracino/paf2chain/tree/v0.1.1)
 
   **Example**
   
   ./paf2chain -i `<spp1_spp2.paf>` > `<spp1_spp2.chain>`
-
-**Example**
-
-The following example shows a scatterplot of human and chimp TR length from a subset of shared tandem repeats with an *overlap threshold = 0.1* and a *similarity score threshold = 95%*.
-
-![Scatterplot of shared Human x Chimpanzee TR length](https://github.com/caroladam/track/blob/main/manual/example_plots/subset_homo_chimp_plot.svg)
 
 ## Genotyping Tandem Repeats
 
