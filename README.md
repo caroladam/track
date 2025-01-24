@@ -20,6 +20,13 @@ conda activate track_env
 bash ./setup.sh
 ```
 
+**Updating TRACK**
+
+If you already have track_env in your conda environments but need to update to a new version:
+```
+conda env update --name track_env --file environment.yml --prune
+```
+
 Each directory within the repository contains example input data, allowing you to perform test runs and familiarize yourself with TRACK's functionalities.
 
 **Repository structure**
