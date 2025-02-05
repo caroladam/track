@@ -17,7 +17,9 @@ rule all:
         expand("outputs/{prefix}_sorted.spanning.bam", prefix=prefixes),
         expand("outputs/{prefix}_sorted.vcf.gz.csi", prefix=prefixes),
         expand("outputs/{prefix}_sorted.spanning.bam.bai", prefix=prefixes),
-        f"merged.vcf.gz"  # Ensure the merged output is correctly specified
+        f"merged.vcf.gz",
+        f"merged_vcf_data.csv",
+        f"merged_allele_stats.csv"
 
 rule trgt_genotype:
     input:
@@ -76,4 +78,28 @@ rule merge_vcfs:
         echo "Merging VCF files from outputs directory: {input.vcfs}"
         trgt merge --vcf {input.vcfs} -O z -o {output.merged_vcf}
         echo "VCF merge completed. Output saved to {output.merged_vcf}"
+        """
+
+rule vcf_to_dataframe:
+    input:
+        vcf="merged.vcf.gz"
+    output:
+        csv="merged_vcf_data.csv"
+    shell:
+        """
+        echo "Converting {input.vcf} to dataframe of repeat genotypes per individual"
+        bash scripts/vcf2df.sh {input.vcf} {output.csv}
+        echo "Conversion completed. Output saved to {output.csv}"
+        """
+
+rule get_allele_stats:
+    input:
+        vcf="merged.vcf.gz"
+    output:
+        csv="merged_allele_stats.csv"
+    shell:
+        """
+        echo "Processing {input.vcf} to get allele count and length range per locus"
+        bash scripts/get_allele_stats.sh {input.vcf} {output.csv}
+        echo "Output saved to {output.csv}"
         """
