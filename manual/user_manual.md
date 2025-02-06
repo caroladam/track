@@ -187,6 +187,8 @@ snakemake --cores <number_of_cores>
 **Outputs**
 - Sorted VCF and BAM files for each genotyped TR are stored in `outputs/`
 - Merged VCF file containing multi-sample TR variants are in `merged.vcf.gz`
+- Data frame containing genotypes per sample for each TR locus are in `merged_vcf_data.csv`
+- Data frame containing unique allele count and allele length range for each TR locus are in `merged_allele_stats.csv`
   
 ## Population Genetic Analyses
 This Snakemake workflow performs basic population genetic analyses by calculating observed heterozygosity and genetic diversity metrics from a merged VCF file. The analysis utilizes an R script to process the VCF and population information files and outputs both summary statistics (in CSV format) and visualizations (in SVG format).
