@@ -4,9 +4,9 @@ The Tandem Repeat Analysis and Comparison Kit (**TRACK**) is an automated Snakem
 
 ![track_workflow](https://github.com/caroladam/track/blob/main/manual/track_workflow.png)
 
-**Basic usage**
+**Installation and set up**
 
-To get started with TRACK:
+## **Linux**
 ```
 # Clone TRACK repository:
 git clone https://github.com/caroladam/track.git
@@ -27,9 +27,41 @@ If you already have track_env in your conda environments but need to update to a
 conda env update --name track_env --file environment.yml --prune
 ```
 
+## **MacOS**
+
+TRACK is a Linux-based tool. While most required dependencies should work on MacOS via conda-forge or bioconda, some exceptions may require installation via Homebrew or manual setup.
+**We do not provide full support for MacOS**, but we offer some tips and suggestions to help MacOS users utilize TRACK's functionalities.
+
+```
+# Clone TRACK repository
+git clone https://github.com/caroladam/track.git
+cd track
+
+# Create and activate the conda environment:
+conda env create -f environment.yml
+conda activate track_env
+
+# Get necessary files to run examples:
+bash ./setup.sh
+
+# If not already, install Homebrew
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Libraries that require Homebrew installation
+brew install gawk gcc coreutils postgresql libpq gnu-sed gnu-tar
+
+# Software that require Homebrew installation
+brew install ucsc-kent-tools emboss
+```
+**Tools that require manual installation**
+- Tandem Repeat Finder (TRF) - necessary for TR catalog building. Pre-compiled versions and installation instructions [here](https://github.com/Benson-Genomics-Lab/TRF?tab=readme-ov-file#pre-compiled-versions)!
+- Tandem Repeat Genotyping Tool (TRGT) - necessary for TR genotyping on long-read data. Source code and instructions available [here](https://github.com/PacificBiosciences/trgt?tab=readme-ov-file)!
+
+
+## **TRACK Repository structure**
+
 Each directory within the repository contains example input data, allowing you to perform test runs and familiarize yourself with TRACK's functionalities.
 
-**Repository structure**
 ```
 track/
 ├── environment.yml
