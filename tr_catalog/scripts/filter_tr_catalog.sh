@@ -40,7 +40,7 @@ do
 		awk -v "chrom=$prefix" 'BEGIN{FS=" "; OFS="\t"} {tr_l = $2-$1} {print chrom, $1, $2, $3, tr_l, $4, $14, $15}' OFS='\t' >> "$catalog"
 done
 
-# Filter TRs with total length <= 10Kbp and copy number >= 2.5
+# Filter TRs with total length >= 10Kbp and copy number <= 2.5
 awk '{ if ($5 <= 10000 && $6 >= 2.5) {print} }' "$catalog" > temp_file && mv temp_file "$catalog"
 
 # Remove trailing tabs
@@ -52,14 +52,26 @@ awk -v var="$outfile" '{print $0 "\t" var}' "$catalog" > temp && mv temp "$catal
 # Sort TRF output
 sort -k1,1 -k2,2n -k3 "$catalog" > "${catalog}.sorted.bed"
 
-# Merge overlapping elements (up to 5bp apart)
-mergeBed -i "${catalog}.sorted.bed" -d 5 > "${catalog}.merged.bed"
+# Cluster overlapping elements (up to 5bp apart)
+bedtools cluster -i "${catalog}.sorted.bed" -d 5 > "${catalog}.clustered.bed"
 
-# Select TR with the smallest motif length using bedmap
-bedmap --min-element "${catalog}.merged.bed" "${catalog}.sorted.bed" > "${catalog}.no_overlaps.bed"
+# Select TR with the smallest motif length
 
-# Remove trailing decimals
-sed -i 's/\.000000//g' "${catalog}.no_overlaps.bed"
+awk 'BEGIN{OFS="\t"} {
+    cluster_id = $10;
+    motif_length = $4;
+    # If cluster ID already exists, compare motif length
+    if (cluster_id in cluster) {
+        split(cluster[cluster_id], fields, "\t");
+        if (motif_length < fields[4]) {
+            cluster[cluster_id] = $0;  # Update TR if motif length is smaller
+        }
+    } else {
+        cluster[cluster_id] = $0;
+    }
+} END {
+    for (c in cluster) print cluster[c];
+}' "${catalog}.clustered.bed" | cut -f1-9 > "${catalog}.no_overlaps.bed"
 
 rm "$catalog"
 
