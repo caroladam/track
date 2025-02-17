@@ -26,18 +26,18 @@ output_plot <- args[4]
 df <- read.table(input_bed_file)
 
 # Fit a linear model
-lm_fit <- lm(V13 ~ V4, data = df)
+lm_fit <- lm(V14 ~ V5, data = df)
 
 # Calculate the R-squared value
 r_squared <- round(summary(lm_fit)$r.squared, 3)
 r_squared_label <- paste0("R² = ", r_squared)
 
 # Scatterplot of shared TR total length with regression line and R-squared value
-p <- ggplot(df, aes(x = V4, y = V13)) + 
+p <- ggplot(df, aes(x = V5, y = V14)) + 
     geom_point(size = 2, show.legend = F) + 
     geom_smooth(method = "lm", color = "red", linewidth = 0.5) +
     geom_abline(slope = 1, intercept = 0, color = "black") +
-    annotate("text", x = max(df$V4) * 0.8, y = max(df$V13) * 0.2, 
+    annotate("text", x = max(df$V5) * 0.8, y = max(df$V14) * 0.2, 
              label = r_squared_label, size = 6, color = "blue") + 
     scale_x_continuous(name = paste0(species1_name, " TR length")) +
     scale_y_continuous(name = paste0(species2_name, " TR length")) +
@@ -54,7 +54,7 @@ p <- ggplot(df, aes(x = V4, y = V13)) +
         axis.text.x = element_text(colour = "black", size = 22),
         axis.text.y = element_text(colour = "black", size = 22))
 
-# Save the plot as an SVG file
-svg(output_plot)
+# Save the plot as an PNG file
+png(output_plot, unit='in', height=12, width=12, res=500)
 print(p)
 dev.off()
