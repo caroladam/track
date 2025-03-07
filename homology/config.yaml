@@ -14,6 +14,9 @@ output_prefix_genome2_to_genome1: "pantro_to_homo_lift"
 genome1: "homo"         # Identifier for genome1
 genome2: "pantro"       # Identifier for genome2
 
+# Provide the number of threads for motif alignment. If not provided, the default is set to 1.
+threads: 18
+
 # Path to align_lifted_trs script
 align_sh: "scripts/align_lifted_trs.sh"
 
