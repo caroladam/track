@@ -1,12 +1,12 @@
 #!/bin/bash
 
 usage() {
-    echo "Usage: $0 -l <lifted_trs> -c <query_tr_catalog> -t <target_prefix> -q <query_prefix> -o <overlap_perc> -a <align_perc>"
+    echo "Usage: $0 -l <lifted_trs> -c <query_tr_catalog> -t <target_prefix> -q <query_prefix> -o <overlap_perc> -a <align_perc> -j <threads>"
     exit 1
 }
 
 # Parse command-line options
-while getopts ":l:c:t:q:o:a:" opt; do
+while getopts ":l:c:t:q:o:a:j:" opt; do
     case ${opt} in
         l) lifted_trs="$OPTARG" ;;
         c) query_tr_catalog="$OPTARG" ;;
@@ -14,6 +14,7 @@ while getopts ":l:c:t:q:o:a:" opt; do
         q) query_prefix="$OPTARG" ;;
         o) overlap_perc="$OPTARG" ;;
         a) align_perc="$OPTARG" ;;
+        j) threads="$OPTARG" ;;
         *) usage ;;
     esac
 done
@@ -74,37 +75,36 @@ for chunk in "$chunk_dir"/chunk_*; do
         rm "$line_file"  # Remove original line file
     done
 
-    # Align each FASTA file using Needle
-    aligned_dir="../aligned_${target_prefix}_${query_prefix}/${chunk_subdir}"
-    mkdir -p "$aligned_dir"
+    # Run needle alignments in parallel and save results in aligned_dir
+    parallel -j "$threads" 'needle -asequence {} -bsequence {} -auto -gapopen 10 -gapextend 0.5 -outfile {/.}.out' ::: *.fa
 
-    for fasta_file in *.fa; do
-        outfile="${aligned_dir}/${fasta_file%.fa}.out"
-        needle -asequence "$fasta_file" -bsequence "$fasta_file" -auto -gapopen 10 -gapextend 0.5 -outfile "$outfile"
-        sed -i "13,42d" "$outfile"
-        cat "$outfile" "$fasta_file" > temp_file && mv temp_file "$outfile"
-        rm "$fasta_file"
+    # Post-processing: sed, concatenate with FASTA file
+    for outfile in *.out
+    do
+        filename=$(basename -- "$outfile")
+        sed -i '13,42d' "$outfile"
+        cat "$outfile" "${filename%.out}.fa" > temp_file
+        mv temp_file "$outfile"
+        rm "${filename%.out}.fa"
     done
 
-    score_file="${aligned_dir}/scores.txt"
-    bedloc_file="${aligned_dir}/locations.txt"
-    output_file="${aligned_dir}/sim_score_overlap${overlap_perc}_${target_prefix}_${query_prefix}.txt"
-    filtered_file="${aligned_dir}/sim_score_overlap${overlap_perc}_${target_prefix}_${query_prefix}_filtered.txt"
+    score_file=scores.txt
+    bedloc_file=locations.txt
+    output_file=sim_score_overlap${overlap_perc}_${target_prefix}_${query_prefix}.txt
+    filtered_file=sim_score_overlap${overlap_perc}_${target_prefix}_${query_prefix}_filtered.txt
 
     # Extract similarity scores for each pairwise TR alignment
-    grep "Similarity" "${aligned_dir}"/*.out | grep -o "[0-9]*\.[0-9]" > "$score_file"
+    grep "Similarity" *.out | grep -o "[0-9]*\.[0-9]" > "$score_file"
 
     # Extract chromosome locations for each TR
-    grep ">${query_prefix}" "${aligned_dir}"/*.out | sed 's/.*>//' > "$bedloc_file"
+    grep ">${query_prefix}" *.out | sed 's/.*>//' > "$bedloc_file"
 
     # Combine locations and scores into final output
     paste "$bedloc_file" "$score_file" > "$output_file"
     awk -v align_perc="$align_perc" '$2 >= align_perc' "$output_file" > "$filtered_file"
-    rm "${aligned_dir}"/*.out
-
-    # Return to parent directory after processing chunk and remove chunk sub-directories
+    rm "${chunk_subdir}"/*.out
     cd - > /dev/null || exit
-    rm -r "$chunk_subdir"
+    
 done
 
 # Combine all results into a single file
