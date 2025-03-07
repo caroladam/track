@@ -30,7 +30,7 @@ conda env update --name track_env --file environment.yml --prune
 ## **MacOS**
 
 TRACK is a Linux-based tool. While most required dependencies should work on MacOS via conda-forge or bioconda, some exceptions may require installation via Homebrew or manual setup.
-**We do not provide full support for MacOS**, but we offer some tips and suggestions to help MacOS users utilize TRACK's functionalities.
+**While we are not formally supporting TRACK use on MacOS**, we are providing guidelines and tips to help MacOS users utilize TRACK's functionalities.
 
 ```
 # Clone TRACK repository
