@@ -1,6 +1,6 @@
 # TRACK - Tandem Repeat Analysis and Comparison Kit
 
-The Tandem Repeat Analysis and Comparison Kit (**TRACK**) is an automated Snakemake workflow designed to identify and compare tandem repeats (TRs) across species, and genotype catalogs in population-wide data. The pipeline includes scripts for creating and filtering TR catalogs from reference genomes, generating catalogs of putative homologous TRs between species pairs, and performing population-level genotyping and basic population genetics analyses. Additionally, TRACK features tools for visualizing TR length comparisons between species and essential population genetic metrics, such as genetic diversity and observed heterozygosity.
+The Tandem Repeat Analysis and Comparison Kit (**TRACK**) is an automated Linux-based Snakemake workflow designed to identify and compare tandem repeats (TRs) across species, and genotype catalogs in population-wide data. The pipeline includes scripts for creating and filtering TR catalogs from reference genomes, generating catalogs of putative homologous TRs between species pairs, and performing population-level genotyping and basic population genetics analyses. Additionally, TRACK features tools for visualizing TR length comparisons between species and essential population genetic metrics, such as genetic diversity and observed heterozygosity.
 
 ![track_workflow](https://github.com/caroladam/track/blob/main/manual/track_workflow.png)
 
