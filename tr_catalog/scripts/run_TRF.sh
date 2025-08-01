@@ -24,7 +24,7 @@ mkdir -p trf_results
 # TRF configuration
 matchscore=2
 mismatchscore=5
-indelscore=7
+indelscore=17
 pm=80
 pi=10
 minscore=24
