@@ -30,7 +30,7 @@ rule run_liftOver_genome1_to_genome2:
         # Append the first three columns at the end of each line with tab separation
         awk 'BEGIN {{OFS="\\t"}} {{print $0, $1, $2, $3}}' {input.input_bed} > $modified_bed
         # Run liftOver using the modified bed file
-        liftOver -bedPlus=3 -tab $modified_bed {input.chain_file} {output.output_bed} {output.unmapped_file} || exit 1
+        liftOver -bedPlus=3 -tab -minMatch=0.1 $modified_bed {input.chain_file} {output.output_bed} {output.unmapped_file} || exit 1
         # Clean up temporary modified bed file
         rm $modified_bed
         echo "LiftOver from genome1 to genome2 completed."
@@ -51,7 +51,7 @@ rule run_liftOver_genome2_to_genome1:
         # Append the first three columns at the end of each line with tab separation
         awk 'BEGIN {{OFS="\\t"}} {{print $0, $1, $2, $3}}' {input.input_bed} > $modified_bed
         # Run liftOver using the modified bed file
-        liftOver -bedPlus=3 -tab $modified_bed {input.chain_file} {output.output_bed} {output.unmapped_file} || exit 1
+        liftOver -bedPlus=3 -tab -minMatch=0.1 $modified_bed {input.chain_file} {output.output_bed} {output.unmapped_file} || exit 1
         # Clean up temporary modified bed file
         rm $modified_bed
         echo "LiftOver from genome2 to genome1 completed."
@@ -69,12 +69,13 @@ rule alignment_similarity_genome1_to_genome2:
         query_prefix=config["genome2"],   # genome2 is the query
         overlap_perc=config["overlap_perc"],
         align_perc=config["align_perc"],
+        thread_flag=("-j " + str(config["threads"])) if "threads" in config and config["threads"] else "-t 1",
         script=config["align_sh"]
     shell:
         """
         bash {params.script} -l {input.lifted_trs} -c {input.query_tr_catalog} \
             -t {params.target_prefix} -q {params.query_prefix} \
-            -o {params.overlap_perc} -a {params.align_perc}
+            -o {params.overlap_perc} -a {params.align_perc} {params.thread_flag"
         """
 
 # Rule to run alignment similarity extraction for genome2 to genome1
@@ -89,15 +90,16 @@ rule alignment_similarity_genome2_to_genome1:
         query_prefix=config["genome1"],   # genome1 is the query
         overlap_perc=config["overlap_perc"],
         align_perc=config["align_perc"],
+        thread_flag=("-j " + str(config["threads"])) if "threads" in config and config["threads"] else "-t 1",
         script=config["align_sh"]
     shell:
         """
         bash {params.script} -l {input.lifted_trs} -c {input.query_tr_catalog} \
             -t {params.target_prefix} -q {params.query_prefix} \
-            -o {params.overlap_perc} -a {params.align_perc}
+            -o {params.overlap_perc} -a {params.align_perc} {params.thread.flag}
         """
 
-# Rule to get putative homolous catalog between genome1 and genome2
+# Rule to get putative homologous catalog between genome1 and genome2
 rule create_homologous_tr_catalog:
     input:
         fst_genome_shared_trs=f"overlap{config['overlap_perc']}_sim{config['align_perc']}_{config['genome1']}_{config['genome2']}.bed",
