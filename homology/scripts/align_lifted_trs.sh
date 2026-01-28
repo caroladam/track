@@ -66,7 +66,7 @@ rm "$shared_trs"
 
 # Add species names and keep only columns of interest - index and motif sequence, then sort file
 gawk -i inplace -v tgt="$target_prefix" -v qry="$query_prefix" \
-	'BEGIN {FS="\t"; OFS="\t"} {print tgt"lifted", $13, $14, $15, $7, qry"query", $13, $14, $15, $19, $10, $11, $12, tgt"originalcatalog"}' "$sorted_shared_trs"
+	'BEGIN {FS="\t"; OFS="\t"} {print tgt"lifted", $14, $15, $16, $8, qry"query", $14, $15, $16, $21, $11, $12, $13, tgt"originalcatalog"}' "$sorted_shared_trs"
 
 echo "Generating reverse complement motif for ${target_prefix} as target."
 
