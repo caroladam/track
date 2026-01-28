@@ -43,17 +43,17 @@ Intermediate files are saved in:
 - `trf_results/`: `.dat` files containing TR results per chromosome.
 
 The `<output_prefix>_catalog.no_overlaps.bed` file contains the following fields: 
-- `<Chromosome>` `<Start>` `<End>` `<TRlength>` `<MotifLength>` `<CopyNumber>` `<MotifSeq>` `<TRSeq>` `<SppID>`
+- `<Chromosome>` `<Start>` `<End>` `<MotifLength>` `<TRlength>` `<CopyNumber>` `<PercentMatch>` `<MotifSeq>` `<TRSeq>` `<SppID>`
 
 **Example:**
 ```
-chr1	7470	7481	11	1	12.0	T	TTTTTTTTTTTT	homo
-chr1	8006	8019	13	4	3.5	AAAG	AAAGAAAGAAAGAA	homo
-chr1	9530	9549	19	6	3.3	CTAACC	CTAATCCTAACCCTAACCCT	homo
-chr1	9605	9653	48	6	8.2	CTGACC	CTGACCCTTACTTTGACCCTGACTTTGATCTCGACCCTGACCATGACCC	homo
-chr1	9692	9715	23	6	4.0	ATCCTA	ATCCTAATCCTATGCCTAACCCTA	homo
-chr1	11719	11739	20	8	2.6	CAGTCCCT	CAGTCCCTCAGTCCCTCTGTC	homo
-chr1	12553	12571	18	1	19.0	A	AAAAAAAAAAAAAACAAAA	homo
+chr1	7470	7481	1	11	12.0	100	T	TTTTTTTTTTTT	homo
+chr1	8006	8019	4	13	3.5	100	AAAG	AAAGAAAGAAAGAA	homo
+chr1	9530	9549	6	19	3.3	92	CTAACC	CTAATCCTAACCCTAACCCT	homo
+chr1	9605	9653	6	48	8.2	62	CTGACC	CTGACCCTTACTTTGACCCTGACTTTGATCTCGACCCTGACCATGACCC	homo
+chr1	9692	9715	6	23	4.0	77	ATCCTA	ATCCTAATCCTATGCCTAACCCTA	homo
+chr1	11719	11739	8	20	2.6	92	CAGTCCCT	CAGTCCCTCAGTCCCTCTGTC	homo
+chr1	12553	12571	1	18	19.0	88	A	AAAAAAAAAAAAAACAAAA	homo
 ```
 
 **Important Note:** The Homology assessment step below expects this specific BED file structure. If you'd like to use your TR catalog, **please ensure it follows the structure**.
