@@ -69,7 +69,7 @@ rule alignment_similarity_genome1_to_genome2:
         query_prefix=config["genome2"],   # genome2 is the query
         overlap_perc=config["overlap_perc"],
         align_perc=config["align_perc"],
-        thread_flag=("-j " + str(config["threads"])) if "threads" in config and config["threads"] else "-t 1",
+        thread_flag=("-j " + str(config["threads"])) if "threads" in config and config["threads"] else "-j 1",
         script=config["align_sh"]
     shell:
         """
@@ -90,7 +90,7 @@ rule alignment_similarity_genome2_to_genome1:
         query_prefix=config["genome1"],   # genome1 is the query
         overlap_perc=config["overlap_perc"],
         align_perc=config["align_perc"],
-        thread_flag=("-j " + str(config["threads"])) if "threads" in config and config["threads"] else "-t 1",
+        thread_flag=("-j " + str(config["threads"])) if "threads" in config and config["threads"] else "-j 1",
         script=config["align_sh"]
     shell:
         """
