@@ -1,54 +1,54 @@
 #!/bin/bash
 
 usage() {
-    echo "Usage: $0 -l <lifted_trs> -c <query_tr_catalog> -t <target_prefix> -q <query_prefix> -o <overlap_perc> -a <align_perc> -j <threads>"
-    exit 1
+	echo "Usage: $0 -l <lifted_trs> -c <query_tr_catalog> -t <target_prefix> -q <query_prefix> -o <overlap_perc> -a <align_perc> -j <threads>"
+	exit 1
 }
 
 # Parse command-line options
 while getopts ":l:c:t:q:o:a:j:" opt; do
-    case ${opt} in
-        l) lifted_trs="$OPTARG" ;;
-        c) query_tr_catalog="$OPTARG" ;;
-        t) target_prefix="$OPTARG" ;;
-        q) query_prefix="$OPTARG" ;;
-        o) overlap_perc="$OPTARG" ;;
-        a) align_perc="$OPTARG" ;;
-	j) threads="$OPTARG" ;;
-        *) usage ;;
-    esac
+	case ${opt} in
+		l) lifted_trs="$OPTARG" ;;
+		c) query_tr_catalog="$OPTARG" ;;
+		t) target_prefix="$OPTARG" ;;
+		q) query_prefix="$OPTARG" ;;
+		o) overlap_perc="$OPTARG" ;;
+		a) align_perc="$OPTARG" ;;
+		j) threads="$OPTARG" ;;
+		*) usage ;;
+	esac
 done
 
 # Check if all required arguments are provided
 if [ -z "$lifted_trs" ] || [ -z "$query_tr_catalog" ] || [ -z "$target_prefix" ] || [ -z "$query_prefix" ] || [ -z "$overlap_perc" ] || [ -z "$align_perc" ]; then
-    usage
+	usage
 fi
 
 # Ensure required commands are available
 for cmd in bedtools awk needle grep paste sed; do
-    if ! command -v "$cmd" &> /dev/null; then
-        echo "Error: $cmd is not installed or not in PATH."
-        exit 1
-    fi
+	if ! command -v "$cmd" &> /dev/null; then
+		echo "Error: $cmd is not installed or not in PATH."
+		exit 1
+	fi
 done
 
 # Function to reverse complement sequences
 revcomp() {
-    echo "$1" | tr 'ACGTacgt' 'TGCAtgca' | rev
+	echo "$1" | tr 'ACGTacgt' 'TGCAtgca' | rev
 }
 
 get_cyclic_permutation() {
-    motif="$1"
-    len=${#motif}
-    smallest="$motif"
-    # Generate all cyclic permutations of the motif
-    for ((i=1; i<len; i++)); do
+	motif="$1"
+	len=${#motif}
+	smallest="$motif"
+	# Generate all cyclic permutations of the motif
+	for ((i=1; i<len; i++)); do
         rotated="${motif:i}${motif:0:i}"
-        if [[ "$rotated" < "$smallest" ]]; then
-            smallest="$rotated"
-        fi
-    done
-    echo "$smallest"
+		if [[ "$rotated" < "$smallest" ]]; then
+			smallest="$rotated"
+		fi
+	done
+	echo "$smallest"
 }
 
 sorted_lifted_trs="${lifted_trs}_sorted"
@@ -66,18 +66,18 @@ rm "$shared_trs"
 
 # Add species names and keep only columns of interest - index and motif sequence, then sort file
 gawk -i inplace -v tgt="$target_prefix" -v qry="$query_prefix" \
-    'BEGIN {FS="\t"; OFS="\t"} {print tgt"lifted", $13, $14, $15, $7, qry"query", $13, $14, $15, $19, $10, $11, $12, tgt"originalcatalog"}' "$sorted_shared_trs"
+	'BEGIN {FS="\t"; OFS="\t"} {print tgt"lifted", $13, $14, $15, $7, qry"query", $13, $14, $15, $19, $10, $11, $12, tgt"originalcatalog"}' "$sorted_shared_trs"
 
 echo "Generating reverse complement motif for ${target_prefix} as target."
 
 rev_shared_trs="revcomp_shared_trs_${target_prefix}_${query_prefix}.bed"
 
 while read -r line; do
-    IFS=$'\t' read -r -a fields <<< "$line"
-    target_motif="${fields[4]}"
-    target_revcomp=$(revcomp "$target_motif")
-    fields[4]="$target_revcomp"
-    echo -e "${fields[*]}" | tr ' ' '\t' >> "$rev_shared_trs"
+	IFS=$'\t' read -r -a fields <<< "$line"
+	target_motif="${fields[4]}"
+	target_revcomp=$(revcomp "$target_motif")
+	fields[4]="$target_revcomp"
+	echo -e "${fields[*]}" | tr ' ' '\t' >> "$rev_shared_trs"
 done < "$sorted_shared_trs"
 
 # Created new files with the smallest cyclic permutation motif
@@ -87,18 +87,18 @@ cyclic_rev_shared_trs="cyclic_revcomp_shared_trs_${target_prefix}_${query_prefix
 
 # Process shared TRs
 while read -r line; do
-    IFS=$'\t' read -r -a fields <<< "$line"
-    fields[4]=$(get_cyclic_permutation "${fields[4]}")
-    fields[9]=$(get_cyclic_permutation "${fields[9]}")
-    echo -e "${fields[*]}" | tr ' ' '\t' >> "$cyclic_shared_trs"
+	IFS=$'\t' read -r -a fields <<< "$line"
+	fields[4]=$(get_cyclic_permutation "${fields[4]}")
+	fields[9]=$(get_cyclic_permutation "${fields[9]}")
+	echo -e "${fields[*]}" | tr ' ' '\t' >> "$cyclic_shared_trs"
 done < "$sorted_shared_trs" &
 
 # Process reverse complement TRs
 while read -r line; do
-    IFS=$'\t' read -r -a fields <<< "$line"
-    fields[4]=$(get_cyclic_permutation "${fields[4]}")
-    fields[9]=$(get_cyclic_permutation "${fields[9]}")
-    echo -e "${fields[*]}" | tr ' ' '\t' >> "$cyclic_rev_shared_trs"
+	IFS=$'\t' read -r -a fields <<< "$line"
+	fields[4]=$(get_cyclic_permutation "${fields[4]}")
+	fields[9]=$(get_cyclic_permutation "${fields[9]}")
+	echo -e "${fields[*]}" | tr ' ' '\t' >> "$cyclic_rev_shared_trs"
 done < "$rev_shared_trs" &
 
 wait
@@ -108,47 +108,47 @@ echo "  - $cyclic_shared_trs"
 echo "  - $cyclic_rev_shared_trs"
 
 run_needle() {
-    local input_file=$1
-    local suffix=$2  # normal or revcomp
-    local chunk_dir="chunks_${target_prefix}_${query_prefix}_${suffix}"
-    mkdir -p "$chunk_dir"
+	local input_file=$1
+	local suffix=$2  # normal or revcomp
+	local chunk_dir="chunks_${target_prefix}_${query_prefix}_${suffix}"
+	mkdir -p "$chunk_dir"
 
-    split -l 10000 "$input_file" "$chunk_dir/chunk_"
+	split -l 10000 "$input_file" "$chunk_dir/chunk_"
 
-    for chunk in "$chunk_dir"/chunk_*; do
-        chunk_subdir="${chunk}_subdir"
-        mkdir -p "$chunk_subdir"
-        mv "$chunk" "$chunk_subdir/"
+	for chunk in "$chunk_dir"/chunk_*; do
+		chunk_subdir="${chunk}_subdir"
+		mkdir -p "$chunk_subdir"
+		mv "$chunk" "$chunk_subdir/"
 
-        cd "$chunk_subdir" || exit
-        split -l 1 "$(basename "$chunk")" line_
+		cd "$chunk_subdir" || exit
+		split -l 1 "$(basename "$chunk")" line_
 
-        for line_file in line_*; do
-            awk 'BEGIN {FS="\t"; OFS="_"} {print ">"$1, $2, $3, $4"\n"$5"\n"">"$6, $7, $8, $9, $11, $12, $13, $14"\n"$10}' "$line_file" > "$line_file.fa"
-            rm "$line_file"
-        done
+		for line_file in line_*; do
+			awk 'BEGIN {FS="\t"; OFS="_"} {print ">"$1, $2, $3, $4"\n"$5"\n"">"$6, $7, $8, $9, $11, $12, $13, $14"\n"$10}' "$line_file" > "$line_file.fa"
+			rm "$line_file"
+		done
 
-        parallel -j "$threads" 'needle -asequence {} -bsequence {} -auto -gapopen 10 -gapextend 0.5 -outfile {/.}.out' ::: *.fa
+		parallel -j "$threads" 'needle -asequence {} -bsequence {} -auto -gapopen 10 -gapextend 0.5 -outfile {/.}.out' ::: *.fa
 
-        for outfile in *.out; do
-            filename=$(basename -- "$outfile")
-            sed -i '13,42d' "$outfile"
-            cat "$outfile" "${filename%.out}.fa" > temp_file
-            mv temp_file "$outfile"
-            rm "${filename%.out}.fa"
-        done
+		for outfile in *.out; do
+			filename=$(basename -- "$outfile")
+			sed -i '13,42d' "$outfile"
+			cat "$outfile" "${filename%.out}.fa" > temp_file
+			mv temp_file "$outfile"
+			rm "${filename%.out}.fa"
+		done
 
-        score_file="${suffix}_scores.txt"
-        bedloc_file="${suffix}_locations.txt"
-        output_file="sim_score_overlap${overlap_perc}_${target_prefix}_${query_prefix}_${suffix}.txt"
-        filtered_file="sim_score_overlap${overlap_perc}_${target_prefix}_${query_prefix}_${suffix}_filtered.txt"
+		score_file="${suffix}_scores.txt"
+		bedloc_file="${suffix}_locations.txt"
+		output_file="sim_score_overlap${overlap_perc}_${target_prefix}_${query_prefix}_${suffix}.txt"
+		filtered_file="sim_score_overlap${overlap_perc}_${target_prefix}_${query_prefix}_${suffix}_filtered.txt"
 
-        grep "Similarity" *.out | grep -o "[0-9]*\.[0-9]" > "$score_file"
-        grep ">${query_prefix}" *.out | sed 's/.*>//' > "$bedloc_file"
-        paste "$bedloc_file" "$score_file" > "$output_file"
+		grep "Similarity" *.out | grep -o "[0-9]*\.[0-9]" > "$score_file"
+		grep ">${query_prefix}" *.out | sed 's/.*>//' > "$bedloc_file"
+		paste "$bedloc_file" "$score_file" > "$output_file"
 
-        cd - > /dev/null || exit
-    done
+		cd - > /dev/null || exit
+	done
 }
 
 chunk_dir="chunks_${target_prefix}_${query_prefix}_normal"
@@ -177,9 +177,9 @@ find "$chunk_dir_rev" -type f -name "*_revcomp.txt" -exec cat {} + > "${revcomp_
 # Select the best score from both sets of files
 echo "Selecting the best alignment score..."
 awk 'FNR==NR {score[$1]=$2; next}
-     {if ($1 in score && $2 > score[$1]) score[$1]=$2}
-     END {for (key in score) print key, score[key]}' \
-     "${normal_output}" "${revcomp_output}" > "$best_score_output"
+	{if ($1 in score && $2 > score[$1]) score[$1]=$2}
+	END {for (key in score) print key, score[key]}' \
+	"${normal_output}" "${revcomp_output}" > "$best_score_output"
 
 filtered_output="overlap${overlap_perc}_sim${align_perc}_${target_prefix}_${query_prefix}.bed"
 
