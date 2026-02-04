@@ -108,13 +108,16 @@ For detailed instructions on setting up configuration files and executing the pi
 You can download the catalogs of TRs identified in T2T genomes of ape species using TRACK in the links below. Reference genomes used to create TR catalogs were obtained from the T2T Consortium [Primate Project v2.0](https://github.com/marbl/Primates?tab=readme-ov-file) and [CHM13 Project v2.0](https://github.com/marbl/CHM13).
 
 Filtered catalogs can be downloaded here:
-- _[Homo sapiens](https://www.dropbox.com/scl/fi/szsyk72fyc0gwlkdr2sie/homo_trf.bed.no_overlaps?rlkey=x85jot9gkuoertl3xa6oac1tz&st=m1oz5zvt&dl=0)_
-- _[Pan troglodytes](https://www.dropbox.com/scl/fi/1oatewfdrztf3tzekozst/chimp_trf.bed.no_overlaps?rlkey=1xelhe5922lejnupqq3n8b2hc&st=2zha2bm8&dl=0)_
-- _[Pan paniscus](https://www.dropbox.com/scl/fi/dqaqhh08d6z2isncq0h3o/bonobo_trf.bed.no_overlaps?rlkey=h0rvsi81e734y5d8hlfrsyoup&st=rsfomo0h&dl=0)_
-- _[Gorilla gorilla](https://www.dropbox.com/scl/fi/fuvk9lgyyj3r3al8znb7d/gorilla_trf.bed.no_overlaps?rlkey=ojaqj7z06xwfxabysv3vuhtvo&st=jdc3uuu6&dl=0)_
-- _[Pongo abelii](https://www.dropbox.com/scl/fi/og45rmuuj5rrnax1sz7au/pabelii_trf.bed.no_overlaps?rlkey=pft6kpbq7ouhwsvajcvh4hwcp&st=00e4lrmc&dl=0)_
-- _[Pongo pygmaeous](https://www.dropbox.com/scl/fi/okib8baqljqr8t0sk0ipc/ppyg_trf.bed.no_overlaps?rlkey=hvrh87v930wjchpqkbp7oofoo&st=4mkwatsw&dl=0)_
-- _[Symphalangus syndactylus](https://www.dropbox.com/scl/fi/jfw6bmjuhkw5kyzi4olp4/symsyn_trf.bed.no_overlaps?rlkey=vngw7jzmr7ejnuynd37mmeu7k&st=fsdurk82&dl=0)_
+- _[Homo sapiens](https://www.dropbox.com/scl/fi/sjmldnebu0acte36yzh18/homo_catalog.no_overlaps.bed?rlkey=dl2jbwjc3jzfycw6lyks5z5ln&st=vf5q3di7&dl=0)_
+- _[Pan troglodytes](https://www.dropbox.com/scl/fi/crr1pz10zvhbets8gxxhx/pantro_catalog.no_overlaps.bed?rlkey=q67hr5jxx5czde9wd0coq80a4&st=s03q81jp&dl=0)_
+- _[Pan paniscus](https://www.dropbox.com/scl/fi/o07s0q44luw25ymhyitc1/bonobo_catalog.no_overlaps.bed?rlkey=xzrx9a1513eh95ebnmoc5siz6&st=wy7oivrm&dl=0)_
+- _[Gorilla gorilla](https://www.dropbox.com/scl/fi/cz1ertfc6xmddequax03t/gorilla_catalog.no_overlaps.bed?rlkey=ba59kh6ktfsbwgougybvu1e3p&st=drpqyd0g&dl=0)_
+- _[Pongo abelii](https://www.dropbox.com/scl/fi/b7klw23lzkl3wnrom7ojj/pabelii_catalog.no_overlaps.bed?rlkey=ofq6u7iw1u0yprnfu8yt4s5hi&st=moas0rfm&dl=0)_
+- _[Pongo pygmaeous](https://www.dropbox.com/scl/fi/wwq1v8ssipa98tyc878l9/ppyg_catalog.no_overlaps.bed?rlkey=v2cs4f1qi8qn25p9o31uotygg&st=9hzsuqx5&dl=0)_
+- _[Symphalangus syndactylus](https://www.dropbox.com/scl/fi/m1bzciwtg5dgsz3y52gmz/symsyn_catalog.no_overlaps.bed?rlkey=ezcvzodw3ixrwsvensvpuo5w0&st=cf9htjdd&dl=0)_
+
+An additional TR catalog for the Rhesus macaque is now available. The reference genome used to create this catalog was obtained from the [T2T-MMU8 QV100 project](https://github.com/zhang-shilong/T2T-MMU8):
+- _[Macaca mulatta](https://www.dropbox.com/scl/fi/ybuie7ep1sz97905furfb/macaca_catalog.no_overlaps.bed?rlkey=vkvcg95v4aqns07sg56qecjok&st=ynpoybxp&dl=0)_ 
 
 ### ⚠️ Tool Development Warning ⚠️
 This repository is constantly being developed and improved; users may encounter changes and updates. We recommend regularly checking for updates and reviewing the documentation to ensure optimal pipeline usage.
