@@ -3,6 +3,10 @@ import glob
 
 configfile: "config.yaml"
 
+# Validate merge/reference logic (If input VCFs predate TRGT v1.0, merge will require a reference file)
+if config.get("merge_requires_reference", False) and not config.get("reference_genome")"
+	raise ValueError("merge_requires_reference is True but no reference_genome is defined in the config.yaml")
+
 # Find all BAM files in the specified directory
 bam_files = glob.glob(os.path.join(config['bam_dir'], "*.bam"))
 prefixes = [os.path.splitext(os.path.basename(bam_file))[0] for bam_file in bam_files]
@@ -71,12 +75,17 @@ rule sort_index_bam:
 rule merge_vcfs:
     input:
         vcfs=expand("outputs/{prefix}_sorted.vcf.gz", prefix=prefixes)
+	params:
+		ref_flag= (
+			f"--reference {config['reference_genome']}"
+			if config.get("merge_requires_reference", False)
+			else "")
     output:
         merged_vcf="merged.vcf.gz"
     shell:
         """
         echo "Merging VCF files from outputs directory: {input.vcfs}"
-        trgt merge --vcf {input.vcfs} -O z -o {output.merged_vcf}
+        trgt merge --vcf {input.vcfs} {params.ref_flag} -O z -o {output.merged_vcf}
         echo "VCF merge completed. Output saved to {output.merged_vcf}"
         """
 

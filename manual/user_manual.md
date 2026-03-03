@@ -177,7 +177,11 @@ bash ./scripts/make_trgt_catalog.sh <output_prefix>_catalog.no_overlaps.bed
 reference_genome: "data/reference.fa"
 tandem_repeat_catalog: "data/catalog.bed" #Make sure the file follows TRGT expected structure
 bam_dir: "data/bam"
-threads: "4"  # Adjust as needed
+threads: 4  # Adjust as needed
+
+# Only set true if merging VCF files generated with TRGT v1.0 or older
+merge_requires_reference: false
+
 ```
 ### **Usage**
 ```
@@ -186,9 +190,9 @@ snakemake --cores <number_of_cores>
 
 **Outputs**
 - Sorted VCF and BAM files for each genotyped TR are stored in `outputs/`
-- Merged VCF file containing multi-sample TR variants are in `merged.vcf.gz`
-- Data frame containing genotypes per sample for each TR locus are in `merged_vcf_data.csv`
-- Data frame containing unique allele count and allele length range for each TR locus are in `merged_allele_stats.csv`
+- Merged VCF file containing multi-sample TR variants is in `merged.vcf.gz`
+- Data frame containing genotypes per sample for each TR locus is in `merged_vcf_data.csv`
+- Data frame containing unique allele count and allele length range for each TR locus is in `merged_allele_stats.csv`
   
 ## Population Genetic Analyses
 This Snakemake workflow performs basic population genetic analyses by calculating observed heterozygosity and genetic diversity metrics from a merged VCF file. The analysis utilizes an R script to process the VCF and population information files and outputs both summary statistics (in CSV format) and visualizations (in SVG format).
